@@ -15,5 +15,13 @@
         "text": "Fredrick did a great job at building out our flower bed and landscaping with the rock walls. His prices are great, and he responds quickly when contacted."
       }
     ]
+  },
+  {
+    "id": "hvac-1",
+    "name": "Floyd's Heating & Air",
+    "category": "hvac",
+    "phone": "(864) 576-5877",
+    "website": "https://www.floydsheatingandair.com/",
+    "description": "Heating and air conditioning services",
   }
 ]
