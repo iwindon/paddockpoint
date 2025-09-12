@@ -12,7 +12,8 @@ A community-driven directory of trusted local service providers for the Paddock 
 - **Category Filtering**: Filter providers by service category for easy browsing
 - **Add New Providers**: Community members can add new service providers with initial reviews
 - **Responsive Design**: Fully mobile-responsive design that works on all devices
-- **Local Storage**: All data is stored locally in your browser - no backend required
+- **Centralized Backend**: All data is stored on a backend server and shared among all users
+- **Real-time Updates**: New services and reviews are immediately visible to all users
 
 ## 📱 Mobile Responsive
 
@@ -22,21 +23,41 @@ The website is fully responsive and optimized for mobile devices:
 
 ## 🚀 Getting Started
 
-### View the Website
+### Running the Application
 
-Simply open `index.html` in your web browser to start using the website immediately.
+The application now requires a backend server to function properly. Follow these steps:
+
+1. **Clone the repository**
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Start the server:**
+   ```bash
+   npm start
+   ```
+   This will start both the API server and serve the frontend files.
+4. **Open your browser** and navigate to `http://localhost:3000`
+
+### Backend Requirements
+
+- **Node.js** (v14 or higher)
+- **npm** (Node Package Manager)
+
+The server will:
+- Serve the frontend files at `http://localhost:3000`
+- Provide API endpoints at `http://localhost:3000/api`
+- Store data persistently in `services-data.json`
+- Initialize with sample data automatically
 
 ### For Development
 
-If you want to make changes or serve the website locally:
+If you want to make changes or run in development mode:
 
 1. Clone this repository
-2. Start a local web server in the project directory:
-   ```bash
-   python3 -m http.server 8080
-   ```
-   Or use any other static file server
-3. Open http://localhost:8080 in your browser
+2. Install dependencies: `npm install`
+3. Start the server: `npm start`
+4. The application will be available at http://localhost:3000
 
 ## 💡 How to Use
 
@@ -67,11 +88,29 @@ If you want to make changes or serve the website locally:
 
 ## 🛠️ Technical Details
 
-- **Pure HTML/CSS/JavaScript**: No frameworks or dependencies required
-- **Local Storage**: Data persists in browser localStorage
+- **Backend**: Node.js with Express server
+- **API**: RESTful API for services and reviews management
+- **Frontend**: Pure HTML/CSS/JavaScript with API integration
+- **Data Storage**: JSON file-based storage (easily replaceable with database)
 - **Responsive Design**: CSS Grid and Flexbox for mobile-friendly layout
 - **Accessibility**: Semantic HTML and proper ARIA labels
 - **Modern CSS**: Uses CSS custom properties and modern layout techniques
+
+### Architecture
+
+The application follows a client-server architecture:
+- **Frontend**: Static HTML/CSS/JavaScript files served by the server
+- **Backend**: Express.js API server handling data operations
+- **Data Layer**: JSON file storage with automatic initialization
+
+### API Endpoints
+
+- `GET /api/services` - Get all service providers
+- `POST /api/services` - Add a new service provider
+- `GET /api/services/:id` - Get specific service provider
+- `POST /api/services/:id/reviews` - Add review to service provider
+
+See [API.md](./API.md) for detailed API documentation.
 
 ### File Structure
 
@@ -79,7 +118,12 @@ If you want to make changes or serve the website locally:
 paddockpoint/
 ├── index.html          # Main HTML structure
 ├── styles.css          # CSS styling and responsive design
-├── script.js           # JavaScript functionality
+├── script.js           # Frontend JavaScript with API integration
+├── api-service.js      # API service layer for backend communication
+├── server.js           # Express server and API routes
+├── package.json        # Node.js dependencies and scripts
+├── services-data.json  # Data storage file (auto-generated)
+├── API.md             # API documentation
 └── README.md          # This documentation
 ```
 
@@ -120,6 +164,8 @@ Service providers are stored as JSON objects with this structure:
   ]
 }
 ```
+
+All data operations now use the backend API instead of localStorage, ensuring data is shared among all users.
 
 ## 🤝 Contributing
 

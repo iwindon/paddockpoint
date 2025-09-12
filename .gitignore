@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Backend data file (will be created automatically)
+services-data.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
