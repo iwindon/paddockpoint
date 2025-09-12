@@ -6,14 +6,10 @@ A community-driven directory of trusted local service providers for the Paddock 
 
 ## 🌟 Features
 
-- **Service Categories**: Browse providers across multiple categories including HVAC, Electrical, Plumbing, Landscaping, Cleaning, Pest Control, Roofing, and General Contractors
-- **Review System**: Read and write reviews for service providers with star ratings
-- **Search Functionality**: Search for specific services or providers by name, category, or description
-- **Category Filtering**: Filter providers by service category for easy browsing
-- **Add New Providers**: Community members can add new service providers with initial reviews
-- **Responsive Design**: Fully mobile-responsive design that works on all devices
-- **Centralized Backend**: All data is stored on a backend server and shared among all users
-- **Real-time Updates**: New services and reviews are immediately visible to all users
+- **Service Categories**: Browse providers across multiple categories including HVAC, Electrical, Plumbing, Landscaping, Cleaning, Pest Control, Roofing, and General Contractors.
+- **Review System**: Read reviews for service providers with star ratings.
+- **Static Data**: Service provider data is stored in a JSON file (`services.json`).
+- **Responsive Design**: Fully mobile-responsive design that works on all devices.
 
 ## 📱 Mobile Responsive
 
@@ -25,92 +21,55 @@ The website is fully responsive and optimized for mobile devices:
 
 ### Running the Application
 
-The application now requires a backend server to function properly. Follow these steps:
+This is a static website that does not require a backend server. Follow these steps:
 
 1. **Clone the repository**
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Start the server:**
-   ```bash
-   npm start
-   ```
-   This will start both the API server and serve the frontend files.
-4. **Open your browser** and navigate to `http://localhost:3000`
-
-### Backend Requirements
-
-- **Node.js** (v14 or higher)
-- **npm** (Node Package Manager)
-
-The server will:
-- Serve the frontend files at `http://localhost:3000`
-- Provide API endpoints at `http://localhost:3000/api`
-- Store data persistently in `services-data.json`
-- Initialize with sample data automatically
+2. **Open the `index.html` file** in your browser to view the application.
 
 ### For Development
 
 If you want to make changes or run in development mode:
 
-1. Clone this repository
-2. Install dependencies: `npm install`
-3. Start the server: `npm start`
-4. The application will be available at http://localhost:3000
+1. Clone this repository.
+2. Open the project in your favorite code editor.
+3. Edit the files as needed (e.g., `index.html`, `styles.css`, `script.js`).
+4. Open `index.html` in your browser to test changes.
 
 ## 💡 How to Use
 
 ### Browsing Services
 
-1. **View All Services**: Click "All Services" to see all available providers
-2. **Filter by Category**: Click any category button (HVAC, Electrical, etc.) to filter results
-3. **Search**: Use the search box to find specific services or providers
-4. **Contact Providers**: Click phone numbers to call directly or visit their websites
-
-### Adding a New Service Provider
-
-1. Click the "Add Service Provider" button
-2. Fill out the form with:
-   - Business name and category
-   - Contact information (phone, website)
-   - Business description
-   - Your name and initial review
-   - Star rating (1-5 stars)
-3. Submit the form to add the provider to the directory
+1. **View All Services**: All service providers are listed on the main page.
+2. **Filter by Category**: Use the category buttons to filter results.
+3. **Contact Providers**: Click phone numbers to call directly or visit their websites.
 
 ### Adding Reviews
 
-1. Find the service provider you want to review
-2. Click the "Add Review" button on their card
-3. Fill out your name, rating, and review text
-4. Submit to add your review
+Currently, reviews are stored in the `services.json` file. To add a review:
+1. Open the `services.json` file.
+2. Locate the service provider you want to review.
+3. Add a new review object to the `reviews` array for that provider.
+
+Example:
+```json
+"reviews": [
+  {
+    "id": "review-8",
+    "reviewer": "John Doe",
+    "rating": 4,
+    "date": "2025-09-12",
+    "text": "Great service and quick response!"
+  }
+]
+```
 
 ## 🛠️ Technical Details
 
-- **Backend**: Node.js with Express server
-- **API**: RESTful API for services and reviews management
-- **Frontend**: Pure HTML/CSS/JavaScript with API integration
-- **Data Storage**: JSON file-based storage (easily replaceable with database)
-- **Responsive Design**: CSS Grid and Flexbox for mobile-friendly layout
-- **Accessibility**: Semantic HTML and proper ARIA labels
-- **Modern CSS**: Uses CSS custom properties and modern layout techniques
-
-### Architecture
-
-The application follows a client-server architecture:
-- **Frontend**: Static HTML/CSS/JavaScript files served by the server
-- **Backend**: Express.js API server handling data operations
-- **Data Layer**: JSON file storage with automatic initialization
-
-### API Endpoints
-
-- `GET /api/services` - Get all service providers
-- `POST /api/services` - Add a new service provider
-- `GET /api/services/:id` - Get specific service provider
-- `POST /api/services/:id/reviews` - Add review to service provider
-
-See [API.md](./API.md) for detailed API documentation.
+- **Frontend**: Pure HTML/CSS/JavaScript.
+- **Data Storage**: Static JSON file (`services.json`).
+- **Responsive Design**: CSS Grid and Flexbox for mobile-friendly layout.
+- **Accessibility**: Semantic HTML and proper ARIA labels.
+- **Modern CSS**: Uses CSS custom properties and modern layout techniques.
 
 ### File Structure
 
@@ -118,63 +77,56 @@ See [API.md](./API.md) for detailed API documentation.
 paddockpoint/
 ├── index.html          # Main HTML structure
 ├── styles.css          # CSS styling and responsive design
-├── script.js           # Frontend JavaScript with API integration
-├── api-service.js      # API service layer for backend communication
-├── server.js           # Express server and API routes
-├── package.json        # Node.js dependencies and scripts
-├── services-data.json  # Data storage file (auto-generated)
-├── API.md             # API documentation
-└── README.md          # This documentation
+├── script.js           # Frontend JavaScript for interactivity
+├── services.json       # Static data file for service providers
+├── README.md           # This documentation
+```
+
+### Data Structure
+
+Service providers are stored as JSON objects with this structure:
+
+```json
+{
+  "id": "unique-id",
+  "name": "Business Name",
+  "category": "service-category",
+  "phone": "(555) 123-4567",
+  "website": "https://example.com",
+  "description": "Business description",
+  "reviews": [
+    {
+      "id": "review-id",
+      "reviewer": "Reviewer Name",
+      "rating": 5,
+      "text": "Review text",
+      "date": "2024-01-01"
+    }
+  ]
+}
 ```
 
 ## 🎨 Customization
 
 ### Adding New Service Categories
 
-To add new service categories, update three places in the code:
+To add new service categories, update the following:
 
-1. **HTML Navigation** (`index.html`): Add new button in the `.main-nav` section
-2. **Form Options** (`index.html`): Add new option in the category select dropdown
-3. **JavaScript Categories** (`script.js`): Update the `formatCategory` function
+1. **HTML Navigation** (`index.html`): Add a new button in the navigation section.
+2. **JavaScript Categories** (`script.js`): Update any filtering logic to include the new category.
 
 ### Styling
 
 All styling is contained in `styles.css`. The design uses CSS custom properties for easy theming and is fully responsive with mobile-first design principles.
 
-### Data Structure
-
-Service providers are stored as JSON objects with this structure:
-
-```javascript
-{
-  id: "unique-id",
-  name: "Business Name",
-  category: "service-category",
-  phone: "(555) 123-4567",
-  website: "https://example.com",
-  description: "Business description",
-  reviews: [
-    {
-      id: "review-id",
-      reviewer: "Reviewer Name",
-      rating: 5,
-      text: "Review text",
-      date: "2024-01-01"
-    }
-  ]
-}
-```
-
-All data operations now use the backend API instead of localStorage, ensuring data is shared among all users.
-
 ## 🤝 Contributing
 
 This is a community project! To contribute:
 
-1. Fork the repository
-2. Make your changes
-3. Test thoroughly on desktop and mobile
-4. Submit a pull request
+1. Fork the repository.
+2. Make your changes.
+3. Test thoroughly on desktop and mobile.
+4. Submit a pull request.
 
 ## 📄 License
 
