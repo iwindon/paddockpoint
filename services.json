@@ -24,5 +24,14 @@
     "website": "https://www.floydsheatingandair.com/",
     "description": "Heating and air conditioning services",
     "reviews": []
+  },
+  {
+    "id": "plumbing-1",
+    "name": "1ne Call Plumbing",
+    "category": "plumbing",
+    "phone": "(864) 663-2255",
+    "website": "https://www.onecallplumbingsc.com/",
+    "description": "Expert plumbers in Greenville & Spartanburg, SC",
+    "reviews": []
   }
 ]
