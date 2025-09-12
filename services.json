@@ -70,5 +70,21 @@
         "date": "2024-07-18"
       }
     ]
-  }
+  },
+  {
+  "id": "landscaping-1",                             // <-- Use the next available integer
+  "name": "Spartan Stripes",
+  "category": "landscaping",
+  "phone": "864-435-7207",
+  "website": "",
+  "description": "Landscaping services",
+  "reviews": [
+    {
+      "reviewer": "Ivan Windon",
+      "rating": 5,
+      "date": "2025-09-12",
+      "text": "Fredrick did a great job at building out our flower bed and landscaping with the rock walls. His prices are great, and he responds quickly when contacted."
+    }
+  ]
+}
 ]
