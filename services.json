@@ -1,0 +1,74 @@
+[
+  {
+    "id": "hvac-1",
+    "name": "Carolina Heating & Air Inc.",
+    "category": "hvac",
+    "phone": "(864) 555-0101",
+    "website": "https://carolinahvac.com",
+    "description": "Professional HVAC installation, repair, and maintenance serving Spartanburg and surrounding areas. Family owned business with over 20 years of experience.",
+    "reviews": [
+      {
+        "id": "review-1",
+        "reviewer": "Sarah Johnson",
+        "rating": 5,
+        "text": "Outstanding service! They installed our new heat pump system quickly and professionally. Very knowledgeable about energy-efficient options.",
+        "date": "2024-08-15"
+      },
+      {
+        "id": "review-2",
+        "reviewer": "Mike Thompson",
+        "rating": 4,
+        "text": "Great work on our AC repair during the summer heat wave. Technician was punctual and explained everything clearly.",
+        "date": "2024-07-22"
+      }
+    ]
+  },
+  {
+    "id": "plumbing-1",
+    "name": "Spartan Plumbing Solutions",
+    "category": "plumbing",
+    "phone": "(864) 555-0202",
+    "website": "",
+    "description": "Licensed plumbers providing residential and commercial plumbing services in the Spartanburg area. 24/7 emergency service available.",
+    "reviews": [
+      {
+        "id": "review-3",
+        "reviewer": "Jennifer Martinez",
+        "rating": 5,
+        "text": "Excellent emergency service! They came out late at night to fix a major pipe leak. Professional, fast, and reasonably priced.",
+        "date": "2024-08-30"
+      },
+      {
+        "id": "review-4",
+        "reviewer": "David Wilson",
+        "rating": 4,
+        "text": "Did a great job on our bathroom renovation plumbing. Clean work and finished on schedule.",
+        "date": "2024-09-05"
+      }
+    ]
+  },
+  {
+    "id": "electrical-1",
+    "name": "Palmetto Electricians",
+    "category": "electrical",
+    "phone": "(864) 555-0303",
+    "website": "https://palmettoelectric.net",
+    "description": "Licensed electrical contractors specializing in residential electrical work, panel upgrades, and smart home installations throughout the Upstate.",
+    "reviews": [
+      {
+        "id": "review-5",
+        "reviewer": "Lisa Chen",
+        "rating": 5,
+        "text": "Fantastic electrical work! Upgraded our entire electrical panel and added smart outlets throughout the house. Very professional crew.",
+        "date": "2024-08-10"
+      },
+      {
+        "id": "review-6",
+        "reviewer": "Robert Taylor",
+        "rating": 5,
+        "text": "Great experience with outdoor lighting installation. They provided excellent design suggestions and quality workmanship.",
+        "date": "2024-07-18"
+      }
+    ]
+  }
+]
