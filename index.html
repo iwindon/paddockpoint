@@ -33,7 +33,7 @@
         <section class="search-section">
             <div class="search-container">
                 <input type="text" id="search-input" placeholder="Search for services or providers...">
-                <button id="add-provider-btn" class="btn-primary">Add Service Provider</button>
+                <button id="request-vendor-btn" class="btn-primary">Request a Vendor</button>
             </div>
         </section>
 
@@ -43,116 +43,9 @@
 
         <section id="no-results" class="no-results" style="display: none;">
             <p>No service providers found for this category.</p>
-            <button class="btn-primary" onclick="document.getElementById('add-provider-modal').style.display = 'block'">
-                Be the first to add a provider
-            </button>
+            <p>To request a new vendor, please use the "Request a Vendor" button above.</p>
         </section>
     </main>
-
-    <!-- Add Provider Modal -->
-    <div id="add-provider-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Add Service Provider</h2>
-            <form id="add-provider-form">
-                <div class="form-group">
-                    <label for="provider-name">Business Name *</label>
-                    <input type="text" id="provider-name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="provider-category">Service Category *</label>
-                    <select id="provider-category" required>
-                        <option value="">Select a category</option>
-                        <option value="hvac">HVAC</option>
-                        <option value="electrical">Electrical</option>
-                        <option value="plumbing">Plumbing</option>
-                        <option value="landscaping">Landscaping</option>
-                        <option value="cleaning">Cleaning</option>
-                        <option value="pest">Pest Control</option>
-                        <option value="roofing">Roofing</option>
-                        <option value="general">General Contractors</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="provider-phone">Phone Number</label>
-                    <input type="tel" id="provider-phone">
-                </div>
-                
-                <div class="form-group">
-                    <label for="provider-website">Website</label>
-                    <input type="url" id="provider-website">
-                </div>
-                
-                <div class="form-group">
-                    <label for="provider-description">Description</label>
-                    <textarea id="provider-description" rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="your-name">Your Name (for the initial review) *</label>
-                    <input type="text" id="your-name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="initial-rating">Your Rating *</label>
-                    <div class="star-rating" id="initial-rating">
-                        <span class="star" data-rating="1">★</span>
-                        <span class="star" data-rating="2">★</span>
-                        <span class="star" data-rating="3">★</span>
-                        <span class="star" data-rating="4">★</span>
-                        <span class="star" data-rating="5">★</span>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="initial-review">Your Review *</label>
-                    <textarea id="initial-review" rows="4" required></textarea>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="document.getElementById('add-provider-modal').style.display = 'none'">Cancel</button>
-                    <button type="submit" class="btn-primary">Add Provider</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Review Modal -->
-    <div id="add-review-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Add Review</h2>
-            <form id="add-review-form">
-                <div class="form-group">
-                    <label for="reviewer-name">Your Name *</label>
-                    <input type="text" id="reviewer-name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="review-rating">Rating *</label>
-                    <div class="star-rating" id="review-rating">
-                        <span class="star" data-rating="1">★</span>
-                        <span class="star" data-rating="2">★</span>
-                        <span class="star" data-rating="3">★</span>
-                        <span class="star" data-rating="4">★</span>
-                        <span class="star" data-rating="5">★</span>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="review-text">Review *</label>
-                    <textarea id="review-text" rows="4" required></textarea>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="document.getElementById('add-review-modal').style.display = 'none'">Cancel</button>
-                    <button type="submit" class="btn-primary">Submit Review</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <footer>
         <div class="container">
@@ -160,7 +53,6 @@
         </div>
     </footer>
 
-    <script src="api-service.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
