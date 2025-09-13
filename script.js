@@ -114,7 +114,8 @@ class ServiceManager {
 
 I would like to request a new vendor be added to the Paddock Point Neighborhood Services directory.
 
-Vendor Name: 
+Vendor Name:
+Contact Name: 
 Service Category: (HVAC, Electrical, Plumbing, Landscaping, Cleaning, Pest Control, Roofing, General Contractors)
 Phone Number: 
 Website: 
@@ -187,6 +188,11 @@ Thank you!`);
                 </div>
                 
                 <div class="service-contact">
+                    ${service.contactName ? `
+                    <div class="contact-item">
+                        👤 <strong>Contact:</strong> ${service.contactName}
+                    </div>
+                    ` : ''}
                     ${service.phone ? `
                         <div class="contact-item">
                             📞 <a href="tel:${service.phone}">${service.phone}</a>

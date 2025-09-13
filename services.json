@@ -6,6 +6,7 @@
     "phone": "(864) 435-7207",
     "website": "",
     "description": "Landscaping services",
+    "contactName": "Fredrick Roughton",
     "reviews": [
       {
         "id": "review-7",
@@ -23,6 +24,7 @@
     "phone": "(864) 576-5877",
     "website": "https://www.floydsheatingandair.com/",
     "description": "Heating and air conditioning services",
+    "contactName": "",
     "reviews": []
   },
   {
@@ -32,6 +34,7 @@
     "phone": "(864) 663-2255",
     "website": "https://www.onecallplumbingsc.com/",
     "description": "Expert plumbers in Greenville & Spartanburg, SC",
+    "contactName": "",
     "reviews": []
   }
 ]
