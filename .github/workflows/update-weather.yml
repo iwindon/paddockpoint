@@ -24,6 +24,7 @@ jobs:
           python - <<'PY'
           import json
           import os
+          import urllib.error
           import urllib.parse
           import urllib.request
           from datetime import datetime, timezone
@@ -43,45 +44,51 @@ jobs:
               params["macAddress"] = device_mac
 
           url = "https://api.ambientweather.net/v1/devices?" + urllib.parse.urlencode(params)
-          with urllib.request.urlopen(url, timeout=30) as response:
-              payload = json.loads(response.read().decode("utf-8"))
+          try:
+              with urllib.request.urlopen(url, timeout=30) as response:
+                  payload = json.loads(response.read().decode("utf-8"))
+          except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+              print("Ambient fetch skipped due to transient error: " + str(exc))
+              raise SystemExit(0)
 
-            if not isinstance(payload, list) or not payload:
-              raise SystemExit("Ambient API returned no devices")
+          if not isinstance(payload, list) or not payload:
+              print("Ambient API returned no devices; keeping existing weather-data.json")
+              raise SystemExit(0)
 
-            device = payload[0]
-            if device_mac:
+          device = payload[0]
+          if device_mac:
               for candidate in payload:
-                mac = (candidate.get("macAddress") or "").lower()
-                if mac == device_mac.lower():
-                  device = candidate
-                  break
+                  mac = (candidate.get("macAddress") or "").lower()
+                  if mac == device_mac.lower():
+                      device = candidate
+                      break
 
           last_data = device.get("lastData") or {}
           station_name = (device.get("info") or {}).get("name")
 
-            tempf = last_data.get("tempf")
-            humidity = last_data.get("humidity")
-            windspeedmph = last_data.get("windspeedmph") or last_data.get("windspeedmph_avg10m")
-            dailyrainin = last_data.get("dailyrainin")
-            baromrelin = last_data.get("baromrelin") or last_data.get("baromabsin")
-            last_updated = last_data.get("dateutc") or last_data.get("date")
+          tempf = last_data.get("tempf")
+          humidity = last_data.get("humidity")
+          windspeedmph = last_data.get("windspeedmph") or last_data.get("windspeedmph_avg10m")
+          dailyrainin = last_data.get("dailyrainin")
+          baromrelin = last_data.get("baromrelin") or last_data.get("baromabsin")
+          last_updated = last_data.get("dateutc") or last_data.get("date")
 
-            if all(value is None for value in [tempf, humidity, windspeedmph, dailyrainin, baromrelin, last_updated]):
+          if all(value is None for value in [tempf, humidity, windspeedmph, dailyrainin, baromrelin, last_updated]):
               keys = sorted(last_data.keys())
-              raise SystemExit("Ambient response had empty lastData for mapped weather fields. lastData keys: " + ",".join(keys))
+              print("Ambient response had no mapped weather fields; keys present: " + ",".join(keys))
+              raise SystemExit(0)
 
           output = {
               "source": "ambient-weather-network",
               "generatedAt": datetime.now(timezone.utc).isoformat(),
               "weather": {
                   "stationName": station_name,
-                "tempf": tempf,
-                "humidity": humidity,
-                "windspeedmph": windspeedmph,
-                "dailyrainin": dailyrainin,
-                "baromrelin": baromrelin,
-                "lastUpdated": last_updated,
+                  "tempf": tempf,
+                  "humidity": humidity,
+                  "windspeedmph": windspeedmph,
+                  "dailyrainin": dailyrainin,
+                  "baromrelin": baromrelin,
+                  "lastUpdated": last_updated,
               },
           }
 
