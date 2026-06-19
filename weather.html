@@ -97,6 +97,14 @@
             return date.toLocaleString();
         }
 
+        function toDate(value) {
+            if (!value) {
+                return null;
+            }
+            const date = new Date(value);
+            return Number.isNaN(date.getTime()) ? null : date;
+        }
+
         function applyWeather(data) {
             setValue("station-name", data.stationName);
             setValue("temp-f", data.tempf);
@@ -120,7 +128,19 @@
             }
 
             applyWeather(payload.weather);
+            const publishedDate = toDate(payload.generatedAt);
+            if (!publishedDate || publishedDate.getUTCFullYear() <= 1970) {
+                setStatus("Feed is still placeholder data. Check the GitHub Action run logs and repository secrets.", true);
+                return;
+            }
+
+            const ageMinutes = Math.floor((Date.now() - publishedDate.getTime()) / 60000);
             const publishedAt = toLocalTime(payload.generatedAt);
+            if (ageMinutes > 30) {
+                setStatus("Weather loaded, but feed is stale (" + ageMinutes + " min old). Published: " + publishedAt, true);
+                return;
+            }
+
             setStatus("Weather updated successfully. Feed published: " + publishedAt, false);
         }
 
