@@ -22,19 +22,118 @@
 <main>
     <h2>Local Weather</h2>
 
-    <div id="weather-widget">
-        <a class="weatherwidget-io" href="https://forecast7.com/en/34d94n81d93/spartanburg/?unit=us" data-label_1="SPARTANBURG" data-label_2="WEATHER" data-theme="pure">SPARTANBURG WEATHER</a>
-        <script>
-            !function(d,s,id){
-                var js,fjs=d.getElementsByTagName(s)[0];
-                if(!d.getElementById(id)){
-                    js=d.createElement(s);js.id=id;
-                    js.src='https://weatherwidget.io/js/widget.min.js';
-                    fjs.parentNode.insertBefore(js,fjs);
-                }
-            }(document,'script','weatherwidget-io-js');
-        </script>
-    </div>
+    <p class="weather-note">
+        Live weather is published from a private server-side sync so API keys are not exposed in this page.
+    </p>
+
+    <section class="weather-config" aria-label="Weather status controls">
+        <h3>Station Feed</h3>
+        <div class="weather-actions">
+            <button id="refresh-weather" type="button">Refresh</button>
+        </div>
+        <p id="weather-status" role="status" aria-live="polite">Loading latest weather data...</p>
+    </section>
+
+    <section id="weather-data" class="weather-data" aria-label="Live weather data">
+        <article class="weather-card">
+            <h4>Station</h4>
+            <p id="station-name">-</p>
+        </article>
+        <article class="weather-card">
+            <h4>Temperature</h4>
+            <p><span id="temp-f">-</span> F</p>
+        </article>
+        <article class="weather-card">
+            <h4>Humidity</h4>
+            <p><span id="humidity">-</span> %</p>
+        </article>
+        <article class="weather-card">
+            <h4>Wind Speed</h4>
+            <p><span id="wind-mph">-</span> mph</p>
+        </article>
+        <article class="weather-card">
+            <h4>Rain (Today)</h4>
+            <p><span id="rain-in">-</span> in</p>
+        </article>
+        <article class="weather-card">
+            <h4>Pressure</h4>
+            <p><span id="pressure-inhg">-</span> inHg</p>
+        </article>
+        <article class="weather-card full">
+            <h4>Last Updated</h4>
+            <p id="last-updated">-</p>
+        </article>
+    </section>
+
+    <noscript>
+        JavaScript is required to load live weather data.
+    </noscript>
+
+    <script>
+        const WEATHER_DATA_URL = "assets/weather-data.json";
+
+        function byId(id) {
+            return document.getElementById(id);
+        }
+
+        function setStatus(message, isError) {
+            const status = byId("weather-status");
+            status.textContent = message;
+            status.className = isError ? "status-error" : "status-ok";
+        }
+
+        function setValue(id, value) {
+            byId(id).textContent = value === undefined || value === null || value === "" ? "-" : value;
+        }
+
+        function toLocalTime(value) {
+            if (!value) {
+                return "-";
+            }
+            const date = new Date(value);
+            if (Number.isNaN(date.getTime())) {
+                return value;
+            }
+            return date.toLocaleString();
+        }
+
+        function applyWeather(data) {
+            setValue("station-name", data.stationName);
+            setValue("temp-f", data.tempf);
+            setValue("humidity", data.humidity);
+            setValue("wind-mph", data.windspeedmph);
+            setValue("rain-in", data.dailyrainin);
+            setValue("pressure-inhg", data.baromrelin);
+            setValue("last-updated", toLocalTime(data.lastUpdated || data.dateutc || data.date));
+        }
+
+        async function fetchPublishedWeather() {
+            setStatus("Loading weather data...", false);
+            const response = await fetch(WEATHER_DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+            if (!response.ok) {
+                throw new Error("Published weather file is unavailable: " + response.status + " " + response.statusText);
+            }
+
+            const payload = await response.json();
+            if (!payload || !payload.weather) {
+                throw new Error("Published weather data is invalid.");
+            }
+
+            applyWeather(payload.weather);
+            const publishedAt = toLocalTime(payload.generatedAt);
+            setStatus("Weather updated successfully. Feed published: " + publishedAt, false);
+        }
+
+        byId("refresh-weather").addEventListener("click", function() {
+            fetchPublishedWeather().catch(function(error) {
+                setStatus(error.message, true);
+            });
+        });
+
+        fetchPublishedWeather().catch(function(error) {
+            setStatus(error.message, true);
+        });
+    </script>
 </main>
 
 <footer>

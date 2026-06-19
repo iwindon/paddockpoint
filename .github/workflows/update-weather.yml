@@ -1,0 +1,86 @@
+name: Update Weather Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch data from Ambient Weather
+        env:
+          AMBIENT_APPLICATION_KEY: ${{ secrets.AMBIENT_APPLICATION_KEY }}
+          AMBIENT_API_KEY: ${{ secrets.AMBIENT_API_KEY }}
+          AMBIENT_DEVICE_MAC: ${{ secrets.AMBIENT_DEVICE_MAC }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+          from datetime import datetime, timezone
+
+          app_key = os.environ.get("AMBIENT_APPLICATION_KEY", "").strip()
+          api_key = os.environ.get("AMBIENT_API_KEY", "").strip()
+          device_mac = os.environ.get("AMBIENT_DEVICE_MAC", "").strip()
+
+          if not app_key or not api_key:
+              raise SystemExit("Missing required secrets: AMBIENT_APPLICATION_KEY and/or AMBIENT_API_KEY")
+
+          params = {
+              "applicationKey": app_key,
+              "apiKey": api_key,
+          }
+          if device_mac:
+              params["macAddress"] = device_mac
+
+          url = "https://api.ambientweather.net/v1/devices?" + urllib.parse.urlencode(params)
+          with urllib.request.urlopen(url, timeout=30) as response:
+              payload = json.loads(response.read().decode("utf-8"))
+
+          if not isinstance(payload, list) or not payload:
+              raise SystemExit("Ambient API returned no devices")
+
+          device = payload[0]
+          last_data = device.get("lastData") or {}
+          station_name = (device.get("info") or {}).get("name")
+
+          output = {
+              "source": "ambient-weather-network",
+              "generatedAt": datetime.now(timezone.utc).isoformat(),
+              "weather": {
+                  "stationName": station_name,
+                  "tempf": last_data.get("tempf"),
+                  "humidity": last_data.get("humidity"),
+                  "windspeedmph": last_data.get("windspeedmph"),
+                  "dailyrainin": last_data.get("dailyrainin"),
+                  "baromrelin": last_data.get("baromrelin"),
+                  "lastUpdated": last_data.get("dateutc") or last_data.get("date"),
+              },
+          }
+
+          with open("assets/weather-data.json", "w", encoding="utf-8") as fh:
+              json.dump(output, fh, indent=2)
+              fh.write("\n")
+          PY
+
+      - name: Commit updated weather file
+        run: |
+          if git diff --quiet assets/weather-data.json; then
+            echo "No weather change to commit"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/weather-data.json
+          git commit -m "chore: update published weather data"
+          git push
