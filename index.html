@@ -36,11 +36,77 @@
         <li><a href="https://www.facebook.com/groups/782839427206996">Paddock Point Community (General)</a></li>
         <li><a href="https://www.facebook.com/groups/2047128332581554">Paddock Point Community (Uncensored)</a></li>
     </ul>
+
+    <section class="worldcup-section" aria-labelledby="worldcup-heading">
+        <h3 id="worldcup-heading">Today's World Cup Matches</h3>
+        <p class="worldcup-note">This updates automatically each day with the latest scheduled matches and status.</p>
+        <p id="worldcup-status" class="worldcup-status">Loading today's matchups...</p>
+        <ul id="worldcup-list" class="worldcup-list"></ul>
+    </section>
 </main>
 
 <footer>
     Paddock Point Neighborhood
 </footer>
+
+<script>
+    async function loadWorldCupMatches() {
+        const statusEl = document.getElementById("worldcup-status");
+        const listEl = document.getElementById("worldcup-list");
+
+        if (!statusEl || !listEl) {
+            return;
+        }
+
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        const dateKey = `${year}${month}${day}`;
+        const endpoint = `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=${dateKey}`;
+
+        try {
+            const response = await fetch(endpoint);
+            if (!response.ok) {
+                throw new Error(`API returned ${response.status}`);
+            }
+
+            const data = await response.json();
+            const events = Array.isArray(data.events) ? data.events : [];
+
+            listEl.innerHTML = "";
+
+            if (events.length === 0) {
+                statusEl.textContent = "No World Cup matches are listed for today.";
+                return;
+            }
+
+            events.forEach((event) => {
+                const competition = event.competitions && event.competitions[0];
+                const competitors = competition && competition.competitors ? competition.competitors : [];
+                const home = competitors.find((c) => c.homeAway === "home");
+                const away = competitors.find((c) => c.homeAway === "away");
+                const homeName = home && home.team ? home.team.shortDisplayName : "Home Team";
+                const awayName = away && away.team ? away.team.shortDisplayName : "Away Team";
+                const shortStatus =
+                    competition && competition.status && competition.status.type
+                        ? competition.status.type.shortDetail
+                        : "Status pending";
+
+                const item = document.createElement("li");
+                item.className = "worldcup-item";
+                item.innerHTML = `<strong>${awayName} vs ${homeName}</strong><span>${shortStatus}</span>`;
+                listEl.appendChild(item);
+            });
+
+            statusEl.textContent = `Showing ${events.length} World Cup match${events.length === 1 ? "" : "es"} for today.`;
+        } catch (error) {
+            statusEl.textContent = "Unable to load today's World Cup matches right now. Please try again later.";
+        }
+    }
+
+    loadWorldCupMatches();
+</script>
 
 </body>
 </html>
