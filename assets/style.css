@@ -238,3 +238,44 @@ footer {
         white-space: normal;
     }
 }
+
+.amenities-note {
+    margin-bottom: 16px;
+}
+
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+
+.amenity-card {
+    border: 1px solid #dfe7da;
+    border-radius: 8px;
+    padding: 14px;
+    background: #fcfdfb;
+}
+
+.amenity-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #355e2e;
+}
+
+.amenity-card ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.amenity-card li {
+    margin-bottom: 8px;
+}
+
+.amenity-card li:last-child {
+    margin-bottom: 0;
+}
+
+.amenities-footer-note {
+    margin-top: 18px;
+    color: #4a5944;
+}
