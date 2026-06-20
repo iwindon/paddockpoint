@@ -50,6 +50,117 @@
 </footer>
 
 <script>
+    const TEAM_TO_ISO2 = {
+        ARG: "ar",
+        AUS: "au",
+        AUT: "at",
+        BEL: "be",
+        BRA: "br",
+        CAN: "ca",
+        CHI: "cl",
+        CHN: "cn",
+        COL: "co",
+        CRO: "hr",
+        CZE: "cz",
+        DEN: "dk",
+        ECU: "ec",
+        EGY: "eg",
+        ENG: "gb",
+        ESP: "es",
+        FRA: "fr",
+        GER: "de",
+        GHA: "gh",
+        GRE: "gr",
+        HUN: "hu",
+        IRN: "ir",
+        IRQ: "iq",
+        ISL: "is",
+        ITA: "it",
+        JAM: "jm",
+        JPN: "jp",
+        KOR: "kr",
+        MAR: "ma",
+        MEX: "mx",
+        NED: "nl",
+        NGA: "ng",
+        NOR: "no",
+        NZL: "nz",
+        PAR: "py",
+        PER: "pe",
+        POL: "pl",
+        POR: "pt",
+        QAT: "qa",
+        RSA: "za",
+        ROU: "ro",
+        SCO: "gb-sct",
+        SEN: "sn",
+        SRB: "rs",
+        SUI: "ch",
+        SWE: "se",
+        TUN: "tn",
+        TUR: "tr",
+        UKR: "ua",
+        URU: "uy",
+        USA: "us",
+        WAL: "gb-wls"
+    };
+
+    const TEAM_NAME_TO_ISO2 = {
+        "argentina": "ar",
+        "australia": "au",
+        "austria": "at",
+        "belgium": "be",
+        "brazil": "br",
+        "canada": "ca",
+        "chile": "cl",
+        "china": "cn",
+        "colombia": "co",
+        "croatia": "hr",
+        "czech republic": "cz",
+        "denmark": "dk",
+        "ecuador": "ec",
+        "egypt": "eg",
+        "england": "gb",
+        "spain": "es",
+        "france": "fr",
+        "germany": "de",
+        "ghana": "gh",
+        "greece": "gr",
+        "hungary": "hu",
+        "iran": "ir",
+        "iraq": "iq",
+        "iceland": "is",
+        "italy": "it",
+        "jamaica": "jm",
+        "japan": "jp",
+        "south korea": "kr",
+        "republic of korea": "kr",
+        "morocco": "ma",
+        "mexico": "mx",
+        "netherlands": "nl",
+        "nigeria": "ng",
+        "norway": "no",
+        "new zealand": "nz",
+        "paraguay": "py",
+        "peru": "pe",
+        "poland": "pl",
+        "portugal": "pt",
+        "qatar": "qa",
+        "romania": "ro",
+        "scotland": "gb-sct",
+        "senegal": "sn",
+        "serbia": "rs",
+        "south africa": "za",
+        "switzerland": "ch",
+        "sweden": "se",
+        "tunisia": "tn",
+        "turkiye": "tr",
+        "ukraine": "ua",
+        "uruguay": "uy",
+        "united states": "us",
+        "wales": "gb-wls"
+    };
+
     function formatLocalKickoffTime(dateIsoString) {
         if (!dateIsoString) {
             return "Time TBD";
@@ -62,12 +173,30 @@
         });
     }
 
+    function getFallbackFlag(team) {
+        if (!team) {
+            return "";
+        }
+
+        const abbreviation = (team.abbreviation || "").toUpperCase();
+        const shortName = (team.shortDisplayName || "").toLowerCase();
+        const displayName = (team.displayName || "").toLowerCase();
+        const iso2 = TEAM_TO_ISO2[abbreviation] || TEAM_NAME_TO_ISO2[shortName] || TEAM_NAME_TO_ISO2[displayName];
+
+        if (!iso2) {
+            return "";
+        }
+
+        // FlagCDN supports high-quality country flags by ISO code.
+        return `https://flagcdn.com/w80/${iso2}.png`;
+    }
+
     function getTeamFlag(team) {
         if (team && Array.isArray(team.logos) && team.logos.length > 0 && team.logos[0].href) {
             return team.logos[0].href;
         }
 
-        return "";
+        return getFallbackFlag(team);
     }
 
     async function loadWorldCupMatches() {
@@ -127,12 +256,12 @@
                 item.innerHTML = `
                     <div class="worldcup-teams">
                         <div class="worldcup-team">
-                            ${awayFlag ? `<img class="worldcup-flag" src="${awayFlag}" alt="${awayName} flag" loading="lazy">` : ""}
+                            ${awayFlag ? `<img class="worldcup-flag" src="${awayFlag}" alt="${awayName} flag" loading="lazy" onerror="this.style.display='none'">` : ""}
                             <span>${awayName}</span>
                         </div>
                         <span class="worldcup-vs">vs</span>
                         <div class="worldcup-team">
-                            ${homeFlag ? `<img class="worldcup-flag" src="${homeFlag}" alt="${homeName} flag" loading="lazy">` : ""}
+                            ${homeFlag ? `<img class="worldcup-flag" src="${homeFlag}" alt="${homeName} flag" loading="lazy" onerror="this.style.display='none'">` : ""}
                             <span>${homeName}</span>
                         </div>
                     </div>
