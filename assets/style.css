@@ -185,6 +185,42 @@ footer {
     background: white;
 }
 
+.worldcup-teams {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.worldcup-team {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.worldcup-flag {
+    width: 24px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid #d4dcd0;
+}
+
+.worldcup-vs {
+    color: #6e7e67;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.worldcup-time {
+    color: #2f5a2a;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
 .worldcup-item span {
     color: #44513d;
     font-size: 0.95rem;
@@ -197,7 +233,8 @@ footer {
         align-items: flex-start;
     }
 
-    .worldcup-item span {
+    .worldcup-item span,
+    .worldcup-time {
         white-space: normal;
     }
 }

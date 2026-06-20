@@ -39,7 +39,7 @@
 
     <section class="worldcup-section" aria-labelledby="worldcup-heading">
         <h3 id="worldcup-heading">Today's World Cup Matches</h3>
-        <p class="worldcup-note">This updates automatically each day with the latest scheduled matches and status.</p>
+        <p class="worldcup-note">This updates automatically each day with matchups, country flags, and local kickoff times.</p>
         <p id="worldcup-status" class="worldcup-status">Loading today's matchups...</p>
         <ul id="worldcup-list" class="worldcup-list"></ul>
     </section>
@@ -50,6 +50,26 @@
 </footer>
 
 <script>
+    function formatLocalKickoffTime(dateIsoString) {
+        if (!dateIsoString) {
+            return "Time TBD";
+        }
+
+        const kickoff = new Date(dateIsoString);
+        return kickoff.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit"
+        });
+    }
+
+    function getTeamFlag(team) {
+        if (team && Array.isArray(team.logos) && team.logos.length > 0 && team.logos[0].href) {
+            return team.logos[0].href;
+        }
+
+        return "";
+    }
+
     async function loadWorldCupMatches() {
         const statusEl = document.getElementById("worldcup-status");
         const listEl = document.getElementById("worldcup-list");
@@ -92,10 +112,32 @@
                     competition && competition.status && competition.status.type
                         ? competition.status.type.shortDetail
                         : "Status pending";
+                const matchState =
+                    competition && competition.status && competition.status.type
+                        ? competition.status.type.state
+                        : "";
+                const homeFlag = getTeamFlag(home && home.team ? home.team : null);
+                const awayFlag = getTeamFlag(away && away.team ? away.team : null);
+                const displayStatus = matchState === "pre"
+                    ? `Kickoff: ${formatLocalKickoffTime(event.date)}`
+                    : shortStatus;
 
                 const item = document.createElement("li");
                 item.className = "worldcup-item";
-                item.innerHTML = `<strong>${awayName} vs ${homeName}</strong><span>${shortStatus}</span>`;
+                item.innerHTML = `
+                    <div class="worldcup-teams">
+                        <div class="worldcup-team">
+                            ${awayFlag ? `<img class="worldcup-flag" src="${awayFlag}" alt="${awayName} flag" loading="lazy">` : ""}
+                            <span>${awayName}</span>
+                        </div>
+                        <span class="worldcup-vs">vs</span>
+                        <div class="worldcup-team">
+                            ${homeFlag ? `<img class="worldcup-flag" src="${homeFlag}" alt="${homeName} flag" loading="lazy">` : ""}
+                            <span>${homeName}</span>
+                        </div>
+                    </div>
+                    <span class="worldcup-time">${displayStatus}</span>
+                `;
                 listEl.appendChild(item);
             });
 
