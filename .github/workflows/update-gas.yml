@@ -31,15 +31,15 @@ jobs:
               return re.sub(r"\s+", " ", value).strip()
 
           def load_existing_stations():
-            if not os.path.exists(OUTPUT):
-              return []
-            try:
-              with open(OUTPUT, "r", encoding="utf-8") as fh:
-                payload = json.load(fh)
-              stations = payload.get("stations")
-              return stations if isinstance(stations, list) else []
-            except Exception:
-              return []
+              if not os.path.exists(OUTPUT):
+                  return []
+              try:
+                  with open(OUTPUT, "r", encoding="utf-8") as fh:
+                      payload = json.load(fh)
+                  stations = payload.get("stations")
+                  return stations if isinstance(stations, list) else []
+              except Exception:
+                  return []
 
           request = urllib.request.Request(
               URL,
@@ -55,59 +55,59 @@ jobs:
 
           try:
               with urllib.request.urlopen(request, timeout=30) as response:
-              text = response.read().decode("utf-8", errors="ignore")
+                  text = response.read().decode("utf-8", errors="ignore")
           except Exception as exc:
-            scrape_status = "fetch-error"
-            scrape_note = "Unable to fetch source feed: " + str(exc)
-            stations = load_existing_stations()
-          else:
-            blocks = re.split(r"\n###\s*\[", text)
-            seen = set()
-            for block in blocks[1:]:
-              heading_end = block.find("]")
-              if heading_end <= 0:
-                continue
-
-              name = normalize_space(block[:heading_end])
-              lines = [normalize_space(line) for line in block.splitlines() if normalize_space(line)]
-
-              address_line = ""
-              city_state_line = ""
-              for idx, line in enumerate(lines):
-                if re.match(r"^\d{2,6}\s", line):
-                  address_line = line
-                  if idx + 1 < len(lines):
-                    city_state_line = lines[idx + 1]
-                  break
-
-              address = normalize_space((address_line + " " + city_state_line).strip())
-              if not address:
-                continue
-
-              price = None
-              price_match = re.search(r"\$(\d+\.\d{2})", block)
-              if price_match:
-                price = float(price_match.group(1))
-
-              key = (name.lower(), address.lower())
-              if key in seen:
-                continue
-              seen.add(key)
-              stations.append({"name": name, "price": price, "address": address})
-
-            stations = stations[:5]
-
-            priced_count = len([s for s in stations if isinstance(s.get("price"), float)])
-            if not stations:
-              scrape_status = "parse-error"
-              scrape_note = "No stations parsed from source text"
+              scrape_status = "fetch-error"
+              scrape_note = "Unable to fetch source feed: " + str(exc)
               stations = load_existing_stations()
-            elif priced_count == 0:
-              scrape_status = "no-priced-stations"
-              scrape_note = "Stations found, but source currently shows no numeric prices"
-            else:
-              scrape_status = "ok"
-              scrape_note = "Parsed " + str(priced_count) + " priced stations"
+          else:
+              blocks = re.split(r"\n###\s*\[", text)
+              seen = set()
+              for block in blocks[1:]:
+                  heading_end = block.find("]")
+                  if heading_end <= 0:
+                      continue
+
+                  name = normalize_space(block[:heading_end])
+                  lines = [normalize_space(line) for line in block.splitlines() if normalize_space(line)]
+
+                  address_line = ""
+                  city_state_line = ""
+                  for idx, line in enumerate(lines):
+                      if re.match(r"^\d{2,6}\s", line):
+                          address_line = line
+                          if idx + 1 < len(lines):
+                              city_state_line = lines[idx + 1]
+                          break
+
+                  address = normalize_space((address_line + " " + city_state_line).strip())
+                  if not address:
+                      continue
+
+                  price = None
+                  price_match = re.search(r"\$(\d+\.\d{2})", block)
+                  if price_match:
+                      price = float(price_match.group(1))
+
+                  key = (name.lower(), address.lower())
+                  if key in seen:
+                      continue
+                  seen.add(key)
+                  stations.append({"name": name, "price": price, "address": address})
+
+              stations = stations[:5]
+
+              priced_count = len([s for s in stations if isinstance(s.get("price"), float)])
+              if not stations:
+                  scrape_status = "parse-error"
+                  scrape_note = "No stations parsed from source text"
+                  stations = load_existing_stations()
+              elif priced_count == 0:
+                  scrape_status = "no-priced-stations"
+                  scrape_note = "Stations found, but source currently shows no numeric prices"
+              else:
+                  scrape_status = "ok"
+                  scrape_note = "Parsed " + str(priced_count) + " priced stations"
 
           stations.sort(key=lambda s: (s.get("price") is None, s.get("price") if s.get("price") is not None else 999))
           stations = stations[:5]
