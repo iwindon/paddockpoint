@@ -1,33 +1,35 @@
 {
-  "source": "gas-scraper",
-  "generatedAt": "1970-01-01T00:00:00Z",
+  "source": "gasbuddy-scrape",
+  "generatedAt": "2026-06-21T18:19:18.843196+00:00",
   "reference": "1125 Yearling Way, Roebuck, SC 29376",
   "radiusMiles": 15,
+  "scrapeStatus": "no-priced-stations",
+  "scrapeNote": "Stations found, but source currently shows no numeric prices",
   "stations": [
     {
       "name": "Exxon",
-      "price": 3.44,
-      "address": "1796 E Blackstock Rd, Moore, SC"
+      "price": null,
+      "address": "1796 E Blackstock Rd Moore, SC"
     },
     {
       "name": "Speedway",
-      "price": 3.58,
-      "address": "1795 E Blackstock Rd, Moore, SC"
+      "price": null,
+      "address": "1795 E Blackstock Rd Moore, SC"
     },
     {
       "name": "Breakers",
       "price": null,
-      "address": "3251 Carolina Country Club Rd, Roebuck, SC"
+      "address": "3251 Carolina Country Club Rd Roebuck, SC"
     },
     {
       "name": "OM Food Mart",
       "price": null,
-      "address": "3900 S Church St Ext, Roebuck, SC"
+      "address": "3900 S Church St Ext Roebuck, SC"
     },
     {
-      "name": "Fifth station",
+      "name": "Support",
       "price": null,
-      "address": "Insufficient local submissions right now."
+      "address": "14241 Dallas Parkway,Suite 350, Dallas,TX 75254"
     }
   ]
 }
