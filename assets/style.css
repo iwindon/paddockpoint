@@ -239,55 +239,6 @@ footer {
     }
 }
 
-.gas-section {
-    margin-top: 26px;
-    border: 1px solid #d9e5d2;
-    border-radius: 10px;
-    padding: 16px;
-    background: #fbfdf9;
-}
-
-.gas-section h3 {
-    margin-top: 0;
-    color: #2f5a2a;
-}
-
-.gas-note {
-    margin-top: 0;
-    color: #4b5b44;
-}
-
-.gas-status {
-    margin: 10px 0;
-    font-weight: 600;
-    color: #2f5a2a;
-}
-
-.gas-list {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.gas-list li {
-    margin-bottom: 10px;
-}
-
-.gas-list li:last-child {
-    margin-bottom: 0;
-}
-
-.gas-address {
-    display: block;
-    color: #4f5f48;
-    font-size: 0.95rem;
-    margin-top: 2px;
-}
-
-.gas-footer-link {
-    margin: 12px 0 0;
-    font-weight: 600;
-}
-
 .amenities-note {
     margin-bottom: 16px;
 }
