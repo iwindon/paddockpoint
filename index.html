@@ -330,11 +330,18 @@
             renderGasStations(stations);
 
             const generated = payload.generatedAt ? new Date(payload.generatedAt) : null;
-            if (generated && !Number.isNaN(generated.getTime())) {
-                statusEl.textContent = "Updated " + generated.toLocaleString();
-            } else {
-                statusEl.textContent = "Updated recently.";
+            if (!generated || Number.isNaN(generated.getTime()) || generated.getUTCFullYear() <= 1970) {
+                statusEl.textContent = "Gas feed is still placeholder data. The scraper ran, but no fresh data was published yet.";
+                return;
             }
+
+            const ageMinutes = Math.floor((Date.now() - generated.getTime()) / 60000);
+            if (ageMinutes > 24 * 60) {
+                statusEl.textContent = "Gas feed loaded, but data is stale (" + ageMinutes + " minutes old).";
+                return;
+            }
+
+            statusEl.textContent = "Updated " + generated.toLocaleString();
         } catch (error) {
             statusEl.textContent = "Unable to load gas prices right now.";
         }
