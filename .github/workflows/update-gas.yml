@@ -1,0 +1,110 @@
+name: Update Gas Prices
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "25 10 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Scrape gas prices
+        run: |
+          python - <<'PY'
+          import html
+          import json
+          import re
+          import urllib.request
+          from datetime import datetime, timezone
+
+          URL = "https://www.gasbuddy.com/gasprices/south-carolina/roebuck"
+          OUTPUT = "assets/gas-prices.json"
+
+          def normalize_space(value):
+              return re.sub(r"\s+", " ", value).strip()
+
+          request = urllib.request.Request(
+              URL,
+              headers={
+                  "User-Agent": "Mozilla/5.0 (compatible; PaddockPointBot/1.0)",
+                  "Accept-Language": "en-US,en;q=0.9",
+              },
+          )
+
+          try:
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  raw_html = response.read().decode("utf-8", errors="ignore")
+          except Exception as exc:
+              print("Gas scrape skipped due to fetch error:", exc)
+              raise SystemExit(0)
+
+          text = html.unescape(raw_html)
+          stations = []
+
+          # Pattern observed in static content snapshots from GasBuddy page text.
+          pattern = re.compile(
+              r"###\s*\[(?P<name>[^\]]+)\].{0,500}?(?P<address>\d{2,6}[^\n<]{5,120}?SC)\s+\$(?P<price>\d+\.\d{2})",
+              re.IGNORECASE | re.DOTALL,
+          )
+
+          seen = set()
+          for match in pattern.finditer(text):
+              name = normalize_space(match.group("name"))
+              address = normalize_space(match.group("address"))
+              price = float(match.group("price"))
+              key = (name.lower(), address.lower())
+              if key in seen:
+                  continue
+              seen.add(key)
+              stations.append({"name": name, "price": price, "address": address})
+
+          stations.sort(key=lambda s: (s["price"] is None, s["price"]))
+          stations = stations[:5]
+
+          if not stations:
+              print("No parsable gas prices found; leaving existing gas-prices.json unchanged.")
+              raise SystemExit(0)
+
+          while len(stations) < 5:
+              stations.append(
+                  {
+                      "name": f"Station {len(stations) + 1}",
+                      "price": None,
+                      "address": "No additional reported station found in scraper results.",
+                  }
+              )
+
+          output = {
+              "source": "gasbuddy-scrape",
+              "generatedAt": datetime.now(timezone.utc).isoformat(),
+              "reference": "1125 Yearling Way, Roebuck, SC 29376",
+              "radiusMiles": 15,
+              "stations": stations,
+          }
+
+          with open(OUTPUT, "w", encoding="utf-8") as fh:
+              json.dump(output, fh, indent=2)
+              fh.write("\n")
+
+          print("Wrote", OUTPUT, "with", len(stations), "stations")
+          PY
+
+      - name: Commit updated gas prices
+        run: |
+          if git diff --quiet assets/gas-prices.json; then
+            echo "No gas price change to commit"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/gas-prices.json
+          git commit -m "chore: update published gas prices"
+          git push

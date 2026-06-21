@@ -44,6 +44,16 @@
         <p id="worldcup-status" class="worldcup-status">Loading today's matchups...</p>
         <ul id="worldcup-list" class="worldcup-list"></ul>
     </section>
+
+    <section class="gas-section" aria-labelledby="gas-heading">
+        <h3 id="gas-heading">Lowest Local Gas Prices (within ~15 miles)</h3>
+        <p class="gas-note">Reference area: 1125 Yearling Way, Roebuck, SC 29376. Prices depend on user reporting and may change quickly.</p>
+        <p id="gas-status" class="gas-status">Loading latest gas prices...</p>
+        <ol id="gas-list" class="gas-list"></ol>
+        <p class="gas-footer-link">
+            <a href="https://www.google.com/maps/search/gas+stations+near+1125+Yearling+Way,+Roebuck,+SC+29376" target="_blank" rel="noopener noreferrer">Open nearby gas stations in Google Maps</a>
+        </p>
+    </section>
 </main>
 
 <footer>
@@ -51,6 +61,8 @@
 </footer>
 
 <script>
+    const GAS_DATA_URL = "assets/gas-prices.json";
+
     const TEAM_TO_ISO2 = {
         ARG: "ar",
         AUS: "au",
@@ -277,7 +289,59 @@
         }
     }
 
+    function renderGasStations(stations) {
+        const listEl = document.getElementById("gas-list");
+        if (!listEl) {
+            return;
+        }
+
+        listEl.innerHTML = "";
+        stations.forEach((station) => {
+            const item = document.createElement("li");
+            const priceText = typeof station.price === "number" ? `$${station.price.toFixed(2)}` : "Price unavailable";
+            item.innerHTML = `
+                <strong>${station.name || "Unknown station"}</strong> - ${priceText}
+                <span class="gas-address">${station.address || "Address unavailable"}</span>
+            `;
+            listEl.appendChild(item);
+        });
+    }
+
+    async function loadGasPrices() {
+        const statusEl = document.getElementById("gas-status");
+        const listEl = document.getElementById("gas-list");
+
+        if (!statusEl || !listEl) {
+            return;
+        }
+
+        try {
+            const response = await fetch(GAS_DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+            if (!response.ok) {
+                throw new Error("Gas feed unavailable");
+            }
+
+            const payload = await response.json();
+            const stations = Array.isArray(payload.stations) ? payload.stations.slice(0, 5) : [];
+            if (stations.length === 0) {
+                throw new Error("No station data in gas feed");
+            }
+
+            renderGasStations(stations);
+
+            const generated = payload.generatedAt ? new Date(payload.generatedAt) : null;
+            if (generated && !Number.isNaN(generated.getTime())) {
+                statusEl.textContent = "Updated " + generated.toLocaleString();
+            } else {
+                statusEl.textContent = "Updated recently.";
+            }
+        } catch (error) {
+            statusEl.textContent = "Unable to load gas prices right now.";
+        }
+    }
+
     loadWorldCupMatches();
+    loadGasPrices();
 </script>
 
 </body>

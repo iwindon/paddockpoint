@@ -1,0 +1,33 @@
+{
+  "source": "gas-scraper",
+  "generatedAt": "1970-01-01T00:00:00Z",
+  "reference": "1125 Yearling Way, Roebuck, SC 29376",
+  "radiusMiles": 15,
+  "stations": [
+    {
+      "name": "Exxon",
+      "price": 3.44,
+      "address": "1796 E Blackstock Rd, Moore, SC"
+    },
+    {
+      "name": "Speedway",
+      "price": 3.58,
+      "address": "1795 E Blackstock Rd, Moore, SC"
+    },
+    {
+      "name": "Breakers",
+      "price": null,
+      "address": "3251 Carolina Country Club Rd, Roebuck, SC"
+    },
+    {
+      "name": "OM Food Mart",
+      "price": null,
+      "address": "3900 S Church St Ext, Roebuck, SC"
+    },
+    {
+      "name": "Fifth station",
+      "price": null,
+      "address": "Insufficient local submissions right now."
+    }
+  ]
+}
