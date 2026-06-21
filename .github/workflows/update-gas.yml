@@ -30,6 +30,26 @@ jobs:
           def normalize_space(value):
               return re.sub(r"\s+", " ", value).strip()
 
+          def count_priced(stations):
+              return len([s for s in stations if isinstance(s.get("price"), (int, float))])
+
+          def station_key(station):
+              name = (station.get("name") or "").strip().lower()
+              address = (station.get("address") or "").strip().lower()
+              return name + "|" + address
+
+          def merge_prices_from_existing(new_stations, existing_stations):
+              existing_by_key = {station_key(s): s for s in existing_stations}
+              merged = []
+              for station in new_stations:
+                  merged_station = dict(station)
+                  if merged_station.get("price") is None:
+                      previous = existing_by_key.get(station_key(merged_station))
+                      if previous and isinstance(previous.get("price"), (int, float)):
+                          merged_station["price"] = previous.get("price")
+                  merged.append(merged_station)
+              return merged
+
           def load_existing_stations():
               if not os.path.exists(OUTPUT):
                   return []
@@ -52,6 +72,7 @@ jobs:
           stations = []
           scrape_status = "ok"
           scrape_note = ""
+          existing_stations = load_existing_stations()
 
           try:
               with urllib.request.urlopen(request, timeout=30) as response:
@@ -101,13 +122,23 @@ jobs:
               if not stations:
                   scrape_status = "parse-error"
                   scrape_note = "No stations parsed from source text"
-                  stations = load_existing_stations()
+                  stations = existing_stations
               elif priced_count == 0:
                   scrape_status = "no-priced-stations"
-                  scrape_note = "Stations found, but source currently shows no numeric prices"
+                  stations = merge_prices_from_existing(stations, existing_stations)
+                  merged_priced = count_priced(stations)
+                  if merged_priced > 0:
+                      scrape_note = "Source had no numeric prices; using last known prices for " + str(merged_priced) + " station(s)"
+                  else:
+                      scrape_note = "Stations found, but source currently shows no numeric prices"
               else:
                   scrape_status = "ok"
                   scrape_note = "Parsed " + str(priced_count) + " priced stations"
+
+          if count_priced(stations) == 0 and count_priced(existing_stations) > 0:
+              stations = existing_stations
+              scrape_status = "fallback-previous"
+              scrape_note = "Using previous feed because latest source had no priced stations"
 
           stations.sort(key=lambda s: (s.get("price") is None, s.get("price") if s.get("price") is not None else 999))
           stations = stations[:5]
