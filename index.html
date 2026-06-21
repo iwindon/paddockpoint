@@ -336,6 +336,14 @@
             }
 
             const ageMinutes = Math.floor((Date.now() - generated.getTime()) / 60000);
+            const scrapeStatus = payload.scrapeStatus || "";
+            const scrapeNote = payload.scrapeNote || "";
+
+            if (scrapeStatus && scrapeStatus !== "ok") {
+                statusEl.textContent = "Updated " + generated.toLocaleString() + ". Source note: " + scrapeNote;
+                return;
+            }
+
             if (ageMinutes > 24 * 60) {
                 statusEl.textContent = "Gas feed loaded, but data is stale (" + ageMinutes + " minutes old).";
                 return;

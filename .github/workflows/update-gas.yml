@@ -18,17 +18,28 @@ jobs:
       - name: Scrape gas prices
         run: |
           python - <<'PY'
-          import html
           import json
+          import os
           import re
           import urllib.request
           from datetime import datetime, timezone
 
-          URL = "https://www.gasbuddy.com/gasprices/south-carolina/roebuck"
+          URL = "https://r.jina.ai/http://www.gasbuddy.com/gasprices/south-carolina/roebuck"
           OUTPUT = "assets/gas-prices.json"
 
           def normalize_space(value):
               return re.sub(r"\s+", " ", value).strip()
+
+          def load_existing_stations():
+            if not os.path.exists(OUTPUT):
+              return []
+            try:
+              with open(OUTPUT, "r", encoding="utf-8") as fh:
+                payload = json.load(fh)
+              stations = payload.get("stations")
+              return stations if isinstance(stations, list) else []
+            except Exception:
+              return []
 
           request = urllib.request.Request(
               URL,
@@ -38,39 +49,68 @@ jobs:
               },
           )
 
+          stations = []
+          scrape_status = "ok"
+          scrape_note = ""
+
           try:
               with urllib.request.urlopen(request, timeout=30) as response:
-                  raw_html = response.read().decode("utf-8", errors="ignore")
+              text = response.read().decode("utf-8", errors="ignore")
           except Exception as exc:
-              print("Gas scrape skipped due to fetch error:", exc)
-              raise SystemExit(0)
+            scrape_status = "fetch-error"
+            scrape_note = "Unable to fetch source feed: " + str(exc)
+            stations = load_existing_stations()
+          else:
+            blocks = re.split(r"\n###\s*\[", text)
+            seen = set()
+            for block in blocks[1:]:
+              heading_end = block.find("]")
+              if heading_end <= 0:
+                continue
 
-          text = html.unescape(raw_html)
-          stations = []
+              name = normalize_space(block[:heading_end])
+              lines = [normalize_space(line) for line in block.splitlines() if normalize_space(line)]
 
-          # Pattern observed in static content snapshots from GasBuddy page text.
-          pattern = re.compile(
-              r"###\s*\[(?P<name>[^\]]+)\].{0,500}?(?P<address>\d{2,6}[^\n<]{5,120}?SC)\s+\$(?P<price>\d+\.\d{2})",
-              re.IGNORECASE | re.DOTALL,
-          )
+              address_line = ""
+              city_state_line = ""
+              for idx, line in enumerate(lines):
+                if re.match(r"^\d{2,6}\s", line):
+                  address_line = line
+                  if idx + 1 < len(lines):
+                    city_state_line = lines[idx + 1]
+                  break
 
-          seen = set()
-          for match in pattern.finditer(text):
-              name = normalize_space(match.group("name"))
-              address = normalize_space(match.group("address"))
-              price = float(match.group("price"))
+              address = normalize_space((address_line + " " + city_state_line).strip())
+              if not address:
+                continue
+
+              price = None
+              price_match = re.search(r"\$(\d+\.\d{2})", block)
+              if price_match:
+                price = float(price_match.group(1))
+
               key = (name.lower(), address.lower())
               if key in seen:
-                  continue
+                continue
               seen.add(key)
               stations.append({"name": name, "price": price, "address": address})
 
-          stations.sort(key=lambda s: (s["price"] is None, s["price"]))
-          stations = stations[:5]
+            stations = stations[:5]
 
-          if not stations:
-              print("No parsable gas prices found; leaving existing gas-prices.json unchanged.")
-              raise SystemExit(0)
+            priced_count = len([s for s in stations if isinstance(s.get("price"), float)])
+            if not stations:
+              scrape_status = "parse-error"
+              scrape_note = "No stations parsed from source text"
+              stations = load_existing_stations()
+            elif priced_count == 0:
+              scrape_status = "no-priced-stations"
+              scrape_note = "Stations found, but source currently shows no numeric prices"
+            else:
+              scrape_status = "ok"
+              scrape_note = "Parsed " + str(priced_count) + " priced stations"
+
+          stations.sort(key=lambda s: (s.get("price") is None, s.get("price") if s.get("price") is not None else 999))
+          stations = stations[:5]
 
           while len(stations) < 5:
               stations.append(
@@ -86,6 +126,8 @@ jobs:
               "generatedAt": datetime.now(timezone.utc).isoformat(),
               "reference": "1125 Yearling Way, Roebuck, SC 29376",
               "radiusMiles": 15,
+              "scrapeStatus": scrape_status,
+              "scrapeNote": scrape_note,
               "stations": stations,
           }
 
@@ -93,7 +135,7 @@ jobs:
               json.dump(output, fh, indent=2)
               fh.write("\n")
 
-          print("Wrote", OUTPUT, "with", len(stations), "stations")
+          print("Wrote", OUTPUT, "with", len(stations), "stations", "status=", scrape_status)
           PY
 
       - name: Commit updated gas prices
