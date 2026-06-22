@@ -279,3 +279,69 @@ footer {
     margin-top: 18px;
     color: #4a5944;
 }
+
+.school-section {
+    margin-top: 26px;
+    border: 1px solid #d0dcc5;
+    border-radius: 10px;
+    padding: 18px;
+    background: #f7faf4;
+}
+
+.school-section h3 {
+    margin-top: 0;
+    margin-bottom: 6px;
+    color: #2d5a28;
+}
+
+.school-type {
+    margin: 0 0 14px;
+    font-size: 0.95rem;
+    color: #5a7a52;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.school-announcements {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: white;
+    border: 1px solid #e5ede0;
+    border-radius: 6px;
+}
+
+.school-announcements h4 {
+    margin: 0 0 10px;
+    color: #2d5a28;
+    font-size: 0.95rem;
+}
+
+.school-info {
+    margin-top: 14px;
+}
+
+.school-info h4 {
+    margin: 0 0 10px;
+    color: #2d5a28;
+    font-size: 0.95rem;
+}
+
+.school-info ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.school-info li {
+    margin-bottom: 8px;
+}
+
+.school-info li:last-child {
+    margin-bottom: 0;
+}
+
+.placeholder-text {
+    margin: 0;
+    color: #7a8f75;
+    font-style: italic;
+}
