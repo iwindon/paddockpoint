@@ -280,6 +280,15 @@ footer {
     color: #4a5944;
 }
 
+.vendors-note {
+    margin-bottom: 16px;
+}
+
+.vendors-footer-note {
+    margin-top: 18px;
+    color: #4a5944;
+}
+
 .school-section {
     margin-top: 26px;
     border: 1px solid #d0dcc5;
