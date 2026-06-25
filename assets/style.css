@@ -450,3 +450,42 @@ footer {
 .firework-safety-footer a {
     color: #7a2800;
 }
+
+.yard-tip-section {
+    background: #e6f7e8;
+    border: 2px solid #2e7d32;
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 24px;
+}
+
+.yard-tip-section h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #1d5e22;
+}
+
+.yard-tip-intro {
+    margin: 0 0 12px;
+    color: #264d2b;
+    font-weight: 600;
+}
+
+.yard-tip-box {
+    background: #ffffff;
+    border: 1px solid #9ed4a2;
+    border-radius: 6px;
+    padding: 12px 14px;
+}
+
+.yard-tip-focus {
+    margin: 0 0 8px;
+    color: #1f6b2a;
+    font-weight: 700;
+}
+
+.yard-tip-text {
+    margin: 0;
+    color: #2f3c31;
+    line-height: 1.55;
+}

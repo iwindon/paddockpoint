@@ -49,6 +49,15 @@
         </p>
     </section>
 
+    <section class="yard-tip-section" aria-labelledby="yard-tip-heading">
+        <h2 id="yard-tip-heading">Yard Care Tip of the Day</h2>
+        <p class="yard-tip-intro">Built for Paddock Point lawns: Bermuda grass, young trees, front shrubs, and Roebuck red clay soil.</p>
+        <div class="yard-tip-box">
+            <p class="yard-tip-focus" id="yard-tip-focus">Today's focus</p>
+            <p class="yard-tip-text" id="yard-tip-text">Loading today's tip...</p>
+        </div>
+    </section>
+
     <h2>Announcements</h2>
     <p>Welcome to the Paddock Point neighborhood information board. This site provides updates and resources for all residents.</p>
 
@@ -228,6 +237,55 @@
         return getFallbackFlag(team);
     }
 
+    function loadYardTipOfDay() {
+        const focusEl = document.getElementById("yard-tip-focus");
+        const tipEl = document.getElementById("yard-tip-text");
+
+        if (!focusEl || !tipEl) {
+            return;
+        }
+
+        const tips = [
+            {
+                focus: "Weed pressure in Bermuda",
+                text: "Mow Bermuda at about 1 to 1.5 inches and bag clippings when weed heads are present. A dense, low-cut Bermuda canopy shades the soil and naturally suppresses many summer weeds."
+            },
+            {
+                focus: "Red clay watering method",
+                text: "Water deeply but less often: around 1 inch total per week, split into 2 cycles to prevent runoff on hard red clay. Early morning watering helps roots grow deeper and reduces disease risk."
+            },
+            {
+                focus: "Young tree root protection",
+                text: "Keep a 2 to 3 foot mulch ring around 2-to-4-year-old trees and keep mulch a few inches away from the trunk. This prevents mower damage and reduces competition from turf and weeds."
+            },
+            {
+                focus: "Tree sucker control",
+                text: "Remove tree suckers early by pruning them at their point of origin. Suckers steal water and nutrients from the main canopy and can slow healthy tree growth."
+            },
+            {
+                focus: "Shrub and tree spacing",
+                text: "Avoid planting roses or heavy feeders right at the base of young trees. Give trees their own root zone so shrubs and flowers do not compete for water and nutrients in clay soil."
+            },
+            {
+                focus: "Soil improvement over time",
+                text: "Topdress thin lawn areas with a light layer of compost once or twice during the growing season. In red clay, repeated light organic matter additions improve structure and root access over time."
+            },
+            {
+                focus: "Seasonal Bermuda nutrition",
+                text: "Feed Bermuda only during active growth (late spring through summer) and follow label rates. Too much nitrogen can push weak growth and increase mowing and weed issues."
+            }
+        ];
+
+        const now = new Date();
+        const startOfYear = new Date(now.getFullYear(), 0, 0);
+        const msPerDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor((now - startOfYear) / msPerDay);
+        const tip = tips[dayOfYear % tips.length];
+
+        focusEl.textContent = `Today's focus: ${tip.focus}`;
+        tipEl.textContent = tip.text;
+    }
+
     async function loadWorldCupMatches() {
         const statusEl = document.getElementById("worldcup-status");
         const listEl = document.getElementById("worldcup-list");
@@ -305,6 +363,7 @@
         }
     }
 
+    loadYardTipOfDay();
     loadWorldCupMatches();
 </script>
 
