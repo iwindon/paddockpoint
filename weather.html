@@ -46,6 +46,10 @@
             <p><span id="temp-f">-</span> F</p>
         </article>
         <article class="weather-card">
+            <h4>Heat Index</h4>
+            <p><span id="heat-index-f">-</span> F</p>
+        </article>
+        <article class="weather-card">
             <h4>Humidity</h4>
             <p><span id="humidity">-</span> %</p>
         </article>
@@ -107,9 +111,56 @@
             return Number.isNaN(date.getTime()) ? null : date;
         }
 
+        function toNumber(value) {
+            if (value === undefined || value === null || value === "") {
+                return null;
+            }
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : null;
+        }
+
+        // NOAA heat index equation in Fahrenheit with standard adjustments.
+        function calculateHeatIndexF(tempF, humidityPercent) {
+            if (tempF === null || humidityPercent === null) {
+                return null;
+            }
+
+            if (tempF < 80 || humidityPercent < 40) {
+                return tempF;
+            }
+
+            const t = tempF;
+            const rh = humidityPercent;
+
+            let hi =
+                -42.379 +
+                2.04901523 * t +
+                10.14333127 * rh -
+                0.22475541 * t * rh -
+                0.00683783 * t * t -
+                0.05481717 * rh * rh +
+                0.00122874 * t * t * rh +
+                0.00085282 * t * rh * rh -
+                0.00000199 * t * t * rh * rh;
+
+            if (rh < 13 && t >= 80 && t <= 112) {
+                hi -= ((13 - rh) / 4) * Math.sqrt((17 - Math.abs(t - 95)) / 17);
+            } else if (rh > 85 && t >= 80 && t <= 87) {
+                hi += ((rh - 85) / 10) * ((87 - t) / 5);
+            }
+
+            return hi;
+        }
+
         function applyWeather(data) {
+            const stationHeatIndex = toNumber(data.heatindexf);
+            const tempF = toNumber(data.tempf);
+            const humidity = toNumber(data.humidity);
+            const heatIndex = stationHeatIndex !== null ? stationHeatIndex : calculateHeatIndexF(tempF, humidity);
+
             setValue("station-name", data.stationName);
             setValue("temp-f", data.tempf);
+            setValue("heat-index-f", heatIndex !== null ? heatIndex.toFixed(1) : "-");
             setValue("humidity", data.humidity);
             setValue("wind-mph", data.windspeedmph);
             setValue("rain-in", data.dailyrainin);
