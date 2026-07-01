@@ -43,6 +43,26 @@ h2 {
     color: #4a6b3f;
 }
 
+.heat-advisory-section {
+    background: #ffdfd7;
+    border: 2px solid #c62828;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 24px;
+}
+
+.heat-advisory-section h2 {
+    margin: 0 0 8px;
+    color: #8b1e1e;
+}
+
+.heat-advisory-section p {
+    margin: 0;
+    color: #4f1a1a;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
 footer {
     text-align: center;
     padding: 20px;

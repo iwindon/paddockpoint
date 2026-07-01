@@ -22,6 +22,11 @@
 </nav>
 
 <main>
+    <section id="heat-advisory" class="heat-advisory-section" aria-live="polite" hidden>
+        <h2>Heat Advisory</h2>
+        <p id="heat-advisory-message">Heat index conditions are elevated in the neighborhood.</p>
+    </section>
+
     <section class="emergency-contact-section" aria-labelledby="emergency-heading">
         <h2 id="emergency-heading">Important Contact Information</h2>
         <p class="emergency-intro">For non-emergency situations in the Spartanburg area, contact:</p>
@@ -97,6 +102,9 @@
 </footer>
 
 <script>
+    const WEATHER_DATA_URL = "assets/weather-data.json";
+    const HEAT_ADVISORY_THRESHOLD_F = 102;
+
     const TEAM_TO_ISO2 = {
         ARG: "ar",
         AUS: "au",
@@ -246,6 +254,93 @@
         return getFallbackFlag(team);
     }
 
+    function toNumber(value) {
+        if (value === null || value === undefined || value === "") {
+            return null;
+        }
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    // NOAA heat index equation in Fahrenheit with standard adjustments.
+    function calculateHeatIndexF(tempF, humidityPercent) {
+        if (tempF === null || humidityPercent === null) {
+            return null;
+        }
+
+        if (tempF < 80 || humidityPercent < 40) {
+            return tempF;
+        }
+
+        const t = tempF;
+        const rh = humidityPercent;
+
+        let hi =
+            -42.379 +
+            2.04901523 * t +
+            10.14333127 * rh -
+            0.22475541 * t * rh -
+            0.00683783 * t * t -
+            0.05481717 * rh * rh +
+            0.00122874 * t * t * rh +
+            0.00085282 * t * rh * rh -
+            0.00000199 * t * t * rh * rh;
+
+        if (rh < 13 && t >= 80 && t <= 112) {
+            hi -= ((13 - rh) / 4) * Math.sqrt((17 - Math.abs(t - 95)) / 17);
+        } else if (rh > 85 && t >= 80 && t <= 87) {
+            hi += ((rh - 85) / 10) * ((87 - t) / 5);
+        }
+
+        return hi;
+    }
+
+    function setHeatAdvisory(heatIndexF, stationName, updatedLabel) {
+        const advisoryEl = document.getElementById("heat-advisory");
+        const messageEl = document.getElementById("heat-advisory-message");
+
+        if (!advisoryEl || !messageEl || heatIndexF === null || heatIndexF <= HEAT_ADVISORY_THRESHOLD_F) {
+            if (advisoryEl) {
+                advisoryEl.hidden = true;
+            }
+            return;
+        }
+
+        const roundedHeatIndex = Math.round(heatIndexF);
+        const sourceLabel = stationName ? ` from ${stationName}` : "";
+        const timeLabel = updatedLabel ? ` Updated: ${updatedLabel}.` : "";
+        messageEl.textContent = `Heat index is ${roundedHeatIndex} F${sourceLabel}. Limit time outdoors, hydrate frequently, and check on children, pets, and older neighbors.${timeLabel}`;
+        advisoryEl.hidden = false;
+    }
+
+    async function loadHeatAdvisory() {
+        try {
+            const response = await fetch(WEATHER_DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+            if (!response.ok) {
+                return;
+            }
+
+            const payload = await response.json();
+            const weather = payload && payload.weather ? payload.weather : null;
+            if (!weather) {
+                return;
+            }
+
+            const heatIndexFromStation = toNumber(weather.heatindexf);
+            const tempF = toNumber(weather.tempf);
+            const humidity = toNumber(weather.humidity);
+            const computedHeatIndex = calculateHeatIndexF(tempF, humidity);
+            const finalHeatIndex = heatIndexFromStation !== null ? heatIndexFromStation : computedHeatIndex;
+            const stationName = weather.stationName || "";
+            const updatedValue = weather.lastUpdated || payload.generatedAt;
+            const updatedLabel = updatedValue ? new Date(updatedValue).toLocaleString() : "";
+
+            setHeatAdvisory(finalHeatIndex, stationName, updatedLabel);
+        } catch (error) {
+            // Keep the advisory hidden if the feed is unavailable.
+        }
+    }
+
     function loadYardTipOfDay() {
         const focusEl = document.getElementById("yard-tip-focus");
         const tipEl = document.getElementById("yard-tip-text");
@@ -373,6 +468,7 @@
     }
 
     loadYardTipOfDay();
+    loadHeatAdvisory();
     loadWorldCupMatches();
 </script>
 
