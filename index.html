@@ -4,7 +4,7 @@
     <title>Paddock Point - Home</title>
     <link rel="stylesheet" href="assets/style.css">
 </head>
-<body>
+s<body>
 
 <header>
     <h1>Paddock Point Neighborhood Information Board</h1>
@@ -37,6 +37,10 @@
     </section>
 
     <section class="firework-safety-section" aria-labelledby="firework-safety-heading">
+        <section id="usa-250-banner" class="usa-250-banner" aria-label="United States 250th anniversary celebration" hidden>
+            <img class="usa-250-graphic" src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="Flag of the United States" loading="lazy">
+            <p class="usa-250-text">Celebrating 250 Years of the United States &middot; 1776 to 2026</p>
+        </section>
         <h2 id="firework-safety-heading">4th of July Firework Safety Reminder</h2>
         <p class="firework-safety-intro">Please celebrate responsibly and help keep our neighborhood safe.</p>
         <ul class="firework-safety-list">
@@ -313,6 +317,21 @@
         advisoryEl.hidden = false;
     }
 
+    function showUsa250BannerForHolidayWindow() {
+        const bannerEl = document.getElementById("usa-250-banner");
+        if (!bannerEl) {
+            return;
+        }
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        const date = today.getDate();
+        const isDisplayWindow = year === 2026 && month === 6 && (date === 3 || date === 4);
+
+        bannerEl.hidden = !isDisplayWindow;
+    }
+
     async function loadHeatAdvisory() {
         try {
             const response = await fetch(WEATHER_DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
@@ -468,6 +487,7 @@
     }
 
     loadYardTipOfDay();
+    showUsa250BannerForHolidayWindow();
     loadHeatAdvisory();
     loadWorldCupMatches();
 </script>
