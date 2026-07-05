@@ -36,7 +36,7 @@ s<body>
         </div>
     </section>
 
-    <section class="firework-safety-section" aria-labelledby="firework-safety-heading">
+    <section id="firework-safety" class="firework-safety-section" aria-labelledby="firework-safety-heading" hidden>
         <section id="usa-250-banner" class="usa-250-banner" aria-label="United States 250th anniversary celebration" hidden>
             <img class="usa-250-graphic" src="assets/usa-250-anniversary.jpg" alt="U.S. 250th Anniversary graphic" loading="lazy">
             <p class="usa-250-text">Celebrating 250 Years of the United States &middot; 1776 to 2026</p>
@@ -332,6 +332,23 @@ s<body>
         bannerEl.hidden = !isDisplayWindow;
     }
 
+    function showFireworkSafetyForHolidayWindow() {
+        const sectionEl = document.getElementById("firework-safety");
+        if (!sectionEl) {
+            return;
+        }
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const julyFourth = new Date(year, 6, 4);
+        const displayStart = new Date(year, 6, 4);
+        displayStart.setDate(displayStart.getDate() - 14);
+        const currentDate = new Date(year, today.getMonth(), today.getDate());
+        const isDisplayWindow = currentDate >= displayStart && currentDate <= julyFourth;
+
+        sectionEl.hidden = !isDisplayWindow;
+    }
+
     async function loadHeatAdvisory() {
         try {
             const response = await fetch(WEATHER_DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
@@ -487,6 +504,7 @@ s<body>
     }
 
     loadYardTipOfDay();
+    showFireworkSafetyForHolidayWindow();
     showUsa250BannerForHolidayWindow();
     loadHeatAdvisory();
     loadWorldCupMatches();
