@@ -62,6 +62,18 @@
             <p><span id="rain-in">-</span> in</p>
         </article>
         <article class="weather-card">
+            <h4>Rain (Month)</h4>
+            <p><span id="rain-month-in">-</span> in</p>
+        </article>
+        <article class="weather-card">
+            <h4>UV Index</h4>
+            <p><span id="uv-index">-</span></p>
+        </article>
+        <article class="weather-card">
+            <h4>Soil Moisture</h4>
+            <p><span id="soil-moisture">-</span> %</p>
+        </article>
+        <article class="weather-card">
             <h4>Pressure</h4>
             <p><span id="pressure-inhg">-</span> inHg</p>
         </article>
@@ -119,6 +131,11 @@
             return Number.isFinite(parsed) ? parsed : null;
         }
 
+        function formatNumber(value, decimals) {
+            const parsed = toNumber(value);
+            return parsed === null ? "-" : parsed.toFixed(decimals);
+        }
+
         // NOAA heat index equation in Fahrenheit with standard adjustments.
         function calculateHeatIndexF(tempF, humidityPercent) {
             if (tempF === null || humidityPercent === null) {
@@ -159,12 +176,15 @@
             const heatIndex = stationHeatIndex !== null ? stationHeatIndex : calculateHeatIndexF(tempF, humidity);
 
             setValue("station-name", data.stationName);
-            setValue("temp-f", data.tempf);
+            setValue("temp-f", formatNumber(data.tempf, 1));
             setValue("heat-index-f", heatIndex !== null ? heatIndex.toFixed(1) : "-");
-            setValue("humidity", data.humidity);
-            setValue("wind-mph", data.windspeedmph);
-            setValue("rain-in", data.dailyrainin);
-            setValue("pressure-inhg", data.baromrelin);
+            setValue("humidity", formatNumber(data.humidity, 0));
+            setValue("wind-mph", formatNumber(data.windspeedmph, 2));
+            setValue("rain-in", formatNumber(data.dailyrainin, 2));
+            setValue("rain-month-in", formatNumber(data.monthlyrainin, 2));
+            setValue("uv-index", formatNumber(data.uv, 1));
+            setValue("soil-moisture", formatNumber(data.soilmoisture, 0));
+            setValue("pressure-inhg", formatNumber(data.baromrelin, 3));
             setValue("last-updated", toLocalTime(data.lastUpdated || data.dateutc || data.date));
         }
 

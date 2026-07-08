@@ -70,10 +70,13 @@ jobs:
           humidity = last_data.get("humidity")
           windspeedmph = last_data.get("windspeedmph") or last_data.get("windspeedmph_avg10m")
           dailyrainin = last_data.get("dailyrainin")
+            monthlyrainin = last_data.get("monthlyrainin")
+            uv = last_data.get("uv") or last_data.get("uvi")
+            soilmoisture = last_data.get("soilmoisture") or last_data.get("soilmoisture1")
           baromrelin = last_data.get("baromrelin") or last_data.get("baromabsin")
           last_updated = last_data.get("dateutc") or last_data.get("date")
 
-          if all(value is None for value in [tempf, humidity, windspeedmph, dailyrainin, baromrelin, last_updated]):
+            if all(value is None for value in [tempf, humidity, windspeedmph, dailyrainin, monthlyrainin, uv, soilmoisture, baromrelin, last_updated]):
               keys = sorted(last_data.keys())
               print("Ambient response had no mapped weather fields; keys present: " + ",".join(keys))
               raise SystemExit(0)
@@ -87,6 +90,9 @@ jobs:
                   "humidity": humidity,
                   "windspeedmph": windspeedmph,
                   "dailyrainin": dailyrainin,
+                    "monthlyrainin": monthlyrainin,
+                    "uv": uv,
+                    "soilmoisture": soilmoisture,
                   "baromrelin": baromrelin,
                   "lastUpdated": last_updated,
               },

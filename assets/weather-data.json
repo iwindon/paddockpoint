@@ -7,6 +7,9 @@
     "humidity": 47,
     "windspeedmph": 2.24,
     "dailyrainin": 0.01,
+    "monthlyrainin": null,
+    "uv": null,
+    "soilmoisture": null,
     "baromrelin": 29.229,
     "lastUpdated": 1783531320000
   }
