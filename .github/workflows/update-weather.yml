@@ -34,7 +34,14 @@ jobs:
           device_mac = os.environ.get("AMBIENT_DEVICE_MAC", "").strip()
 
           if not app_key or not api_key:
-              raise SystemExit("Missing required secrets: AMBIENT_APPLICATION_KEY and/or AMBIENT_API_KEY")
+              print("Missing required secrets: AMBIENT_APPLICATION_KEY and/or AMBIENT_API_KEY")
+              raise SystemExit(0)
+
+          def first_non_none(*values):
+              for value in values:
+                  if value is not None:
+                      return value
+              return None
 
           params = {
               "applicationKey": app_key,
@@ -66,21 +73,25 @@ jobs:
           last_data = device.get("lastData") or {}
           station_name = (device.get("info") or {}).get("name")
 
-          tempf = last_data.get("tempf")
-          humidity = last_data.get("humidity")
-          windspeedmph = last_data.get("windspeedmph") or last_data.get("windspeedmph_avg10m")
-          dailyrainin = last_data.get("dailyrainin")
-          monthlyrainin = last_data.get("monthlyrainin")
-          uv = last_data.get("uv") or last_data.get("uvi")
-          soilmoisture = (
-              last_data.get("soilmoisture3")
-              or last_data.get("soilmoisture")
-              or last_data.get("soilmoisture1")
-              or last_data.get("soilmoisture2")
-              or last_data.get("soilmoisture4")
-            )
-          baromrelin = last_data.get("baromrelin") or last_data.get("baromabsin")
-          last_updated = last_data.get("dateutc") or last_data.get("date")
+          try:
+              tempf = last_data.get("tempf")
+              humidity = last_data.get("humidity")
+              windspeedmph = first_non_none(last_data.get("windspeedmph"), last_data.get("windspeedmph_avg10m"))
+              dailyrainin = last_data.get("dailyrainin")
+              monthlyrainin = last_data.get("monthlyrainin")
+              uv = first_non_none(last_data.get("uv"), last_data.get("uvi"))
+              soilmoisture = first_non_none(
+                  last_data.get("soilmoisture3"),
+                  last_data.get("soilmoisture"),
+                  last_data.get("soilmoisture1"),
+                  last_data.get("soilmoisture2"),
+                  last_data.get("soilmoisture4")
+              )
+              baromrelin = first_non_none(last_data.get("baromrelin"), last_data.get("baromabsin"))
+              last_updated = first_non_none(last_data.get("dateutc"), last_data.get("date"))
+          except Exception as exc:
+              print("Ambient payload parse skipped due to unexpected structure: " + str(exc))
+              raise SystemExit(0)
 
           if all(value is None for value in [tempf, humidity, windspeedmph, dailyrainin, monthlyrainin, uv, soilmoisture, baromrelin, last_updated]):
               keys = sorted(last_data.keys())
@@ -119,5 +130,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/weather-data.json
-          git commit -m "chore: update published weather data"
-          git push
+
+          if ! git commit -m "chore: update published weather data"; then
+            echo "Nothing to commit after staging"
+            exit 0
+          fi
+
+          git pull --rebase origin "${GITHUB_REF_NAME}" || true
+          if ! git push origin "HEAD:${GITHUB_REF_NAME}"; then
+            echo "Push skipped due to branch protection, token scope, or concurrent updates"
+            exit 0
+          fi
