@@ -173,6 +173,12 @@
             const stationHeatIndex = toNumber(data.heatindexf);
             const tempF = toNumber(data.tempf);
             const humidity = toNumber(data.humidity);
+            const soilMoisture =
+                toNumber(data.soilmoisture) ??
+                toNumber(data.soilmoisture3) ??
+                toNumber(data.soilmoisture1) ??
+                toNumber(data.soilmoisture2) ??
+                toNumber(data.soilmoisture4);
             const heatIndex = stationHeatIndex !== null ? stationHeatIndex : calculateHeatIndexF(tempF, humidity);
 
             setValue("station-name", data.stationName);
@@ -183,7 +189,7 @@
             setValue("rain-in", formatNumber(data.dailyrainin, 2));
             setValue("rain-month-in", formatNumber(data.monthlyrainin, 2));
             setValue("uv-index", formatNumber(data.uv, 1));
-            setValue("soil-moisture", formatNumber(data.soilmoisture, 0));
+            setValue("soil-moisture", soilMoisture !== null ? soilMoisture.toFixed(0) : "-");
             setValue("pressure-inhg", formatNumber(data.baromrelin, 3));
             setValue("last-updated", toLocalTime(data.lastUpdated || data.dateutc || data.date));
         }

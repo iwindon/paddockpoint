@@ -72,7 +72,13 @@ jobs:
           dailyrainin = last_data.get("dailyrainin")
           monthlyrainin = last_data.get("monthlyrainin")
           uv = last_data.get("uv") or last_data.get("uvi")
-          soilmoisture = last_data.get("soilmoisture") or last_data.get("soilmoisture1")
+            soilmoisture = (
+              last_data.get("soilmoisture3")
+              or last_data.get("soilmoisture")
+              or last_data.get("soilmoisture1")
+              or last_data.get("soilmoisture2")
+              or last_data.get("soilmoisture4")
+            )
           baromrelin = last_data.get("baromrelin") or last_data.get("baromabsin")
           last_updated = last_data.get("dateutc") or last_data.get("date")
 
