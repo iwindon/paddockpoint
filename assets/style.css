@@ -230,6 +230,47 @@ footer {
     line-height: 1.6;
 }
 
+.missing-pet-section {
+    border: 2px solid #d6b14d;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #fff9e7 0%, #fffdf5 100%);
+    padding: 16px 18px;
+    margin: 18px 0 26px;
+}
+
+.missing-pet-section h2 {
+    margin-top: 0;
+    color: #8a5a00;
+}
+
+.missing-pet-intro,
+.missing-pet-footer {
+    margin: 0 0 14px;
+    line-height: 1.6;
+}
+
+.missing-pet-media {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.missing-pet-figure {
+    margin: 0;
+    border: 1px solid #e1c878;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.missing-pet-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
 .worldcup-section {
     margin-top: 26px;
     border: 1px solid #d9e5d2;
