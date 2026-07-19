@@ -271,90 +271,6 @@ footer {
     object-fit: cover;
 }
 
-.worldcup-section {
-    margin-top: 26px;
-    border: 1px solid #d9e5d2;
-    border-radius: 10px;
-    padding: 16px;
-    background: #fbfdf9;
-}
-
-.worldcup-section h3 {
-    margin-top: 0;
-    color: #2f5a2a;
-}
-
-.worldcup-note {
-    margin-top: 0;
-    color: #4b5b44;
-}
-
-.worldcup-status {
-    margin: 10px 0;
-    font-weight: 600;
-}
-
-.worldcup-list {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-    display: grid;
-    gap: 10px;
-}
-
-.worldcup-item {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: center;
-    border: 1px solid #e2e8dd;
-    border-radius: 8px;
-    padding: 10px 12px;
-    background: white;
-}
-
-.worldcup-teams {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.worldcup-team {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-}
-
-.worldcup-flag {
-    width: 24px;
-    height: 16px;
-    object-fit: cover;
-    border-radius: 2px;
-    border: 1px solid #d4dcd0;
-}
-
-.worldcup-vs {
-    color: #6e7e67;
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.worldcup-time {
-    color: #2f5a2a;
-    font-size: 0.95rem;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.worldcup-item span {
-    color: #44513d;
-    font-size: 0.95rem;
-    white-space: nowrap;
-}
-
 @media (max-width: 640px) {
     .usa-250-graphic {
         width: min(100%, 420px);
@@ -362,16 +278,6 @@ footer {
 
     .usa-250-text {
         font-size: 0.95rem;
-    }
-
-    .worldcup-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .worldcup-item span,
-    .worldcup-time {
-        white-space: normal;
     }
 }
 
