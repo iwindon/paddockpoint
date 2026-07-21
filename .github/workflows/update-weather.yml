@@ -43,6 +43,51 @@ jobs:
                       return value
               return None
 
+            def parse_numeric(value):
+              if value is None:
+                return None
+              if isinstance(value, (int, float)):
+                return value
+              if isinstance(value, str):
+                cleaned = "".join(ch for ch in value if ch.isdigit() or ch in ".+-")
+                if not cleaned:
+                  return None
+                try:
+                  return float(cleaned)
+                except ValueError:
+                  return None
+              return None
+
+            def pick_soil_moisture(last_data):
+              priority_keys = [
+                "soilmoisture",
+                "soilmoisture1",
+                "soilmoisture2",
+                "soilmoisture3",
+                "soilmoisture4",
+                "soilhumidity",
+                "soilhumidity1",
+                "soilhumidity2",
+                "soilhumidity3",
+                "soilhumidity4",
+              ]
+
+              for key in priority_keys:
+                value = parse_numeric(last_data.get(key))
+                if value is not None:
+                  return value
+
+              dynamic_keys = sorted(
+                key for key in last_data.keys()
+                if key.lower().startswith("soilmoisture") or key.lower().startswith("soilhumidity")
+              )
+              for key in dynamic_keys:
+                value = parse_numeric(last_data.get(key))
+                if value is not None:
+                  return value
+
+              return None
+
           params = {
               "applicationKey": app_key,
               "apiKey": api_key,
@@ -80,13 +125,7 @@ jobs:
               dailyrainin = last_data.get("dailyrainin")
               monthlyrainin = last_data.get("monthlyrainin")
               uv = first_non_none(last_data.get("uv"), last_data.get("uvi"))
-              soilmoisture = first_non_none(
-                  last_data.get("soilmoisture3"),
-                  last_data.get("soilmoisture"),
-                  last_data.get("soilmoisture1"),
-                  last_data.get("soilmoisture2"),
-                  last_data.get("soilmoisture4")
-              )
+                soilmoisture = pick_soil_moisture(last_data)
               baromrelin = first_non_none(last_data.get("baromrelin"), last_data.get("baromabsin"))
               last_updated = first_non_none(last_data.get("dateutc"), last_data.get("date"))
           except Exception as exc:

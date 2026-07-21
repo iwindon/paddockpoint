@@ -132,6 +132,57 @@
             return Number.isFinite(parsed) ? parsed : null;
         }
 
+        function parseNumericValue(value) {
+            const asNumber = toNumber(value);
+            if (asNumber !== null) {
+                return asNumber;
+            }
+
+            if (typeof value === "string") {
+                const cleaned = value.replace(/[^0-9.+-]/g, "");
+                if (cleaned) {
+                    const parsed = Number(cleaned);
+                    if (Number.isFinite(parsed)) {
+                        return parsed;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        function getSoilMoistureValue(data) {
+            const priorityKeys = [
+                "soilmoisture",
+                "soilmoisture1",
+                "soilmoisture2",
+                "soilmoisture3",
+                "soilmoisture4",
+                "soilhumidity",
+                "soilhumidity1",
+                "soilhumidity2",
+                "soilhumidity3",
+                "soilhumidity4"
+            ];
+
+            for (const key of priorityKeys) {
+                const value = parseNumericValue(data[key]);
+                if (value !== null) {
+                    return value;
+                }
+            }
+
+            const dynamicKeys = Object.keys(data).filter((key) => /^(soilmoisture|soilhumidity)\d*$/i.test(key));
+            for (const key of dynamicKeys) {
+                const value = parseNumericValue(data[key]);
+                if (value !== null) {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
         function formatNumber(value, decimals) {
             const parsed = toNumber(value);
             return parsed === null ? "-" : parsed.toFixed(decimals);
@@ -174,12 +225,7 @@
             const stationHeatIndex = toNumber(data.heatindexf);
             const tempF = toNumber(data.tempf);
             const humidity = toNumber(data.humidity);
-            const soilMoisture =
-                toNumber(data.soilmoisture) ??
-                toNumber(data.soilmoisture3) ??
-                toNumber(data.soilmoisture1) ??
-                toNumber(data.soilmoisture2) ??
-                toNumber(data.soilmoisture4);
+            const soilMoisture = getSoilMoistureValue(data);
             const heatIndex = stationHeatIndex !== null ? stationHeatIndex : calculateHeatIndexF(tempF, humidity);
 
             setValue("station-name", data.stationName);
