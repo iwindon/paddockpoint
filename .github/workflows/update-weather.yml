@@ -58,7 +58,29 @@ jobs:
                       return None
               return None
 
+          def extract_soil_values(last_data):
+              soil_values = {}
+              for key, value in last_data.items():
+                  key_l = key.lower()
+                  if key_l.startswith("soilmoisture") or key_l.startswith("soilhumidity") or key_l.startswith("soilhum"):
+                      parsed = parse_numeric(value)
+                      if parsed is not None:
+                          soil_values[key_l] = parsed
+              return soil_values
+
           def pick_soil_moisture(last_data):
+              soil_values = extract_soil_values(last_data)
+
+              # Prefer channel 3 when present (app label: Soil 3).
+              soil3 = first_non_none(
+                  soil_values.get("soilmoisture3"),
+                  soil_values.get("soilhumidity3"),
+                  soil_values.get("soilhum3"),
+                  parse_numeric(last_data.get("soil3")),
+              )
+              if soil3 is not None:
+                  return soil3
+
               priority_keys = [
                   "soilmoisture",
                   "soilmoisture1",
@@ -70,6 +92,12 @@ jobs:
                   "soilhumidity2",
                   "soilhumidity3",
                   "soilhumidity4",
+                  "soilhum",
+                  "soilhum1",
+                  "soilhum2",
+                  "soilhum3",
+                  "soilhum4",
+                  "soil3",
               ]
 
               for key in priority_keys:
@@ -77,12 +105,9 @@ jobs:
                   if value is not None:
                       return value
 
-              dynamic_keys = sorted(
-                  key for key in last_data.keys()
-                  if key.lower().startswith("soilmoisture") or key.lower().startswith("soilhumidity")
-              )
+              dynamic_keys = sorted(soil_values.keys())
               for key in dynamic_keys:
-                  value = parse_numeric(last_data.get(key))
+                  value = soil_values.get(key)
                   if value is not None:
                       return value
 
@@ -125,6 +150,7 @@ jobs:
               dailyrainin = last_data.get("dailyrainin")
               monthlyrainin = last_data.get("monthlyrainin")
               uv = first_non_none(last_data.get("uv"), last_data.get("uvi"))
+              soil_values = extract_soil_values(last_data)
               soilmoisture = pick_soil_moisture(last_data)
               baromrelin = first_non_none(last_data.get("baromrelin"), last_data.get("baromabsin"))
               last_updated = first_non_none(last_data.get("dateutc"), last_data.get("date"))
@@ -149,6 +175,16 @@ jobs:
                   "monthlyrainin": monthlyrainin,
                   "uv": uv,
                   "soilmoisture": soilmoisture,
+                  "soilmoisture3": first_non_none(
+                      soil_values.get("soilmoisture3"),
+                      soil_values.get("soilhumidity3"),
+                      soil_values.get("soilhum3"),
+                      parse_numeric(last_data.get("soil3")),
+                  ),
+                  "soilhumidity3": soil_values.get("soilhumidity3"),
+                  "soilhum3": soil_values.get("soilhum3"),
+                  "soil3": parse_numeric(last_data.get("soil3")),
+                  "soilSensors": soil_values,
                   "baromrelin": baromrelin,
                   "lastUpdated": last_updated,
               },

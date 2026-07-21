@@ -152,6 +152,38 @@
         }
 
         function getSoilMoistureValue(data) {
+            const soil3Direct = [
+                "soilmoisture3",
+                "soilhumidity3",
+                "soilhum3",
+                "soil3"
+            ];
+
+            for (const key of soil3Direct) {
+                const value = parseNumericValue(data[key]);
+                if (value !== null) {
+                    return value;
+                }
+            }
+
+            const sensors = data.soilSensors;
+            if (sensors && typeof sensors === "object") {
+                for (const key of soil3Direct) {
+                    const value = parseNumericValue(sensors[key]);
+                    if (value !== null) {
+                        return value;
+                    }
+                }
+
+                const sensorKeys = Object.keys(sensors).filter((key) => /^(soilmoisture|soilhumidity|soilhum)\d*$/i.test(key));
+                for (const key of sensorKeys) {
+                    const value = parseNumericValue(sensors[key]);
+                    if (value !== null) {
+                        return value;
+                    }
+                }
+            }
+
             const priorityKeys = [
                 "soilmoisture",
                 "soilmoisture1",
@@ -162,7 +194,13 @@
                 "soilhumidity1",
                 "soilhumidity2",
                 "soilhumidity3",
-                "soilhumidity4"
+                "soilhumidity4",
+                "soilhum",
+                "soilhum1",
+                "soilhum2",
+                "soilhum3",
+                "soilhum4",
+                "soil3"
             ];
 
             for (const key of priorityKeys) {
@@ -172,7 +210,7 @@
                 }
             }
 
-            const dynamicKeys = Object.keys(data).filter((key) => /^(soilmoisture|soilhumidity)\d*$/i.test(key));
+            const dynamicKeys = Object.keys(data).filter((key) => /^(soilmoisture|soilhumidity|soilhum)\d*$/i.test(key));
             for (const key of dynamicKeys) {
                 const value = parseNumericValue(data[key]);
                 if (value !== null) {
