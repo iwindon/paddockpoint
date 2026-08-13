@@ -531,3 +531,78 @@ footer {
     color: #2f3c31;
     line-height: 1.55;
 }
+
+.rules-menu-links {
+    margin: 0 0 18px;
+    font-weight: 700;
+    color: #355e2e;
+}
+
+.rules-menu-links a {
+    color: #2d5a28;
+    text-decoration: none;
+}
+
+.rules-menu-links a:hover {
+    text-decoration: underline;
+}
+
+.rules-info-box {
+    border: 2px solid;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+}
+
+.rules-info-box h3 {
+    margin-top: 0;
+}
+
+.rules-info-box p {
+    margin: 0 0 12px;
+    line-height: 1.55;
+}
+
+.rules-info-box p:last-of-type {
+    margin-bottom: 10px;
+}
+
+.rules-info-box ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.rules-info-box li {
+    margin-bottom: 8px;
+}
+
+.rules-info-box li:last-child {
+    margin-bottom: 0;
+}
+
+.general-rules-box {
+    background: #eef6eb;
+    border-color: #8cb382;
+}
+
+.general-rules-box h3 {
+    color: #2a5723;
+}
+
+.arc-box {
+    background: #e9f4ff;
+    border-color: #7aaed8;
+}
+
+.arc-box h3 {
+    color: #1f4f73;
+}
+
+.violations-box {
+    background: #fff0f0;
+    border-color: #d88c8c;
+}
+
+.violations-box h3 {
+    color: #7a2d2d;
+}
