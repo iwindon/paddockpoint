@@ -1,10 +1,10 @@
 {
   "source": "ambient-weather-network",
-  "generatedAt": "2026-08-17T00:22:45.593947+00:00",
+  "generatedAt": "2026-08-17T00:49:40.693901+00:00",
   "weather": {
     "stationName": "Turtle",
-    "tempf": 86.7,
-    "humidity": 75,
+    "tempf": 85.3,
+    "humidity": 77,
     "windspeedmph": 0,
     "dailyrainin": 0,
     "monthlyrainin": 3.92,
@@ -17,7 +17,7 @@
     "soilSensors": {
       "soilhum3": 14
     },
-    "baromrelin": 29.196,
-    "lastUpdated": 1786926120000
+    "baromrelin": 29.199,
+    "lastUpdated": 1786927740000
   }
 }
