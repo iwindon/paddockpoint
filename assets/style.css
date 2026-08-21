@@ -63,6 +63,51 @@ h2 {
     line-height: 1.5;
 }
 
+.hoa-elections-section {
+    border: 1px solid #d8e2d3;
+    border-radius: 8px;
+    background: #f9fcf7;
+    padding: 18px;
+    margin-bottom: 26px;
+}
+
+.hoa-elections-section h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.hoa-elections-intro {
+    margin: 0 0 16px;
+    color: #4a5944;
+}
+
+.hoa-candidate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+}
+
+.hoa-candidate-tile {
+    border: 1px solid #cbdac4;
+    border-radius: 8px;
+    background: #fff;
+    padding: 16px;
+}
+
+.hoa-candidate-tile h3 {
+    margin: 0 0 12px;
+    color: #355e2e;
+}
+
+.hoa-candidate-tile p {
+    margin: 0 0 12px;
+    line-height: 1.6;
+}
+
+.hoa-candidate-tile p:last-child {
+    margin-bottom: 0;
+}
+
 .usa-250-banner {
     border: 2px solid #c13a35;
     border-radius: 10px;
