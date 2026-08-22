@@ -108,6 +108,45 @@ h2 {
     margin-bottom: 0;
 }
 
+.meeting-card-section {
+    border: 1px solid #d4dfcf;
+    border-radius: 8px;
+    background: #f8fbf6;
+    padding: 18px;
+    margin-bottom: 24px;
+}
+
+.meeting-card-section h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.meeting-info-card {
+    border: 1px solid #c7d8bf;
+    border-left: 6px solid #4a6b3f;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 16px;
+}
+
+.meeting-info-card p {
+    margin: 0 0 10px;
+    line-height: 1.6;
+}
+
+.meeting-info-card p:last-child {
+    margin-bottom: 0;
+}
+
+.meeting-info-highlight {
+    font-weight: 700;
+    color: #2f5228;
+}
+
+.meeting-info-footer a {
+    font-weight: 600;
+}
+
 .usa-250-banner {
     border: 2px solid #c13a35;
     border-radius: 10px;
