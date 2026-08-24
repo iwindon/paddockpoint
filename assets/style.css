@@ -77,8 +77,22 @@ h2 {
 }
 
 .hoa-elections-intro {
-    margin: 0 0 16px;
+    margin: 0 0 10px;
     color: #4a5944;
+}
+
+.hoa-proxy-download {
+    border: 1px solid #cbdac4;
+    border-radius: 6px;
+    background: #ffffff;
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    color: #3f5139;
+    line-height: 1.5;
+}
+
+.hoa-proxy-download a {
+    font-weight: 700;
 }
 
 .hoa-candidate-grid {
