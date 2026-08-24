@@ -38,7 +38,7 @@
     <section class="amenities-grid" aria-label="Nearby amenities by category">
         <article class="amenity-card">
             <h3>Churches</h3>
-            <ul>
+            <ul id="church-list">
                 <li>Jesus our Risen Savior - 2575 Reidville Rd.  Spartanburg, SC 29301</li>
                 <li>Walnut Grove Methodist - 1335 Walnut Grove Rd, Roebuck, SC 29376</li>
                 <li>Church at the Mill - 4455 Anderson Mill Rd, Moore, SC 29369</li>
@@ -124,6 +124,21 @@
 <footer>
     Paddock Point Neighborhood
 </footer>
+
+<script>
+    const churchList = document.getElementById("church-list");
+
+    if (churchList) {
+        const churches = Array.from(churchList.children);
+
+        for (let index = churches.length - 1; index > 0; index -= 1) {
+            const randomIndex = Math.floor(Math.random() * (index + 1));
+            [churches[index], churches[randomIndex]] = [churches[randomIndex], churches[index]];
+        }
+
+        churches.forEach((church) => churchList.appendChild(church));
+    }
+</script>
 
 </body>
 </html>
