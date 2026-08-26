@@ -116,6 +116,10 @@ h2 {
     margin-bottom: 12px;
 }
 
+.hoa-candidate-photo-top {
+    object-position: top;
+}
+
 .hoa-candidate-tile h3 {
     margin: 0 0 12px;
     color: #355e2e;
