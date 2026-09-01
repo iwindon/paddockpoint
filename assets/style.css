@@ -134,6 +134,102 @@ h2 {
     margin-bottom: 0;
 }
 
+.board-members-section {
+    border: 1px solid #d8e2d3;
+    border-radius: 8px;
+    background: #f9fcf7;
+    padding: 18px;
+    margin-bottom: 26px;
+}
+
+.board-members-section h3 {
+    margin-top: 0;
+    margin-bottom: 6px;
+    color: #355e2e;
+}
+
+.board-members-intro {
+    margin: 0 0 16px;
+    color: #4a5944;
+}
+
+.board-member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.board-member-card {
+    border: 1px solid #cbdac4;
+    border-radius: 8px;
+    background: #fff;
+    padding: 14px;
+    text-align: center;
+}
+
+.board-member-photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    display: block;
+    border: 3px solid #d8e2d3;
+}
+
+.board-member-photo-top {
+    object-position: top;
+}
+
+.board-member-card h4 {
+    margin: 0 0 6px;
+    color: #355e2e;
+}
+
+.board-member-role {
+    margin: 0;
+    color: #4a6b3f;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.board-members-email {
+    margin: 0;
+    font-weight: 600;
+    color: #355e2e;
+}
+
+.board-members-email a {
+    color: #355e2e;
+}
+
+.management-company-section {
+    border: 1px solid #d0dcc5;
+    border-radius: 8px;
+    background: #fcfdfb;
+    padding: 18px;
+}
+
+.management-company-section h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #355e2e;
+}
+
+.management-company-section p {
+    margin: 0 0 10px;
+    line-height: 1.6;
+}
+
+.management-company-section p:last-child {
+    margin-bottom: 0;
+}
+
+.management-company-section a {
+    color: #2d5a28;
+}
+
 .meeting-card-section {
     border: 1px solid #d4dfcf;
     border-radius: 8px;
