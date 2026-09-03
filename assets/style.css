@@ -858,3 +858,12 @@ footer {
 .violations-box h3 {
     color: #7a2d2d;
 }
+
+.payment-box {
+    background: #fff8e8;
+    border-color: #d6b14d;
+}
+
+.payment-box h3 {
+    color: #8a5a00;
+}
