@@ -784,6 +784,45 @@ footer {
     line-height: 1.55;
 }
 
+.home-care-tip-section {
+    background: #e8f1fb;
+    border: 2px solid #5b8bb8;
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 24px;
+}
+
+.home-care-tip-section h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #24527a;
+}
+
+.home-care-tip-intro {
+    margin: 0 0 12px;
+    color: #294b67;
+    font-weight: 600;
+}
+
+.home-care-tip-box {
+    background: #ffffff;
+    border: 1px solid #a8c6df;
+    border-radius: 6px;
+    padding: 12px 14px;
+}
+
+.home-care-tip-focus {
+    margin: 0 0 8px;
+    color: #24527a;
+    font-weight: 700;
+}
+
+.home-care-tip-text {
+    margin: 0;
+    color: #2f3c31;
+    line-height: 1.55;
+}
+
 .rules-menu-links {
     margin: 0 0 18px;
     font-weight: 700;

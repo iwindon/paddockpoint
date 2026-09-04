@@ -93,6 +93,15 @@
         </div>
     </section>
 
+    <section class="home-care-tip-section" aria-labelledby="home-care-tip-heading">
+        <h2 id="home-care-tip-heading">Home Care Tip of the Day</h2>
+        <p class="home-care-tip-intro">Simple maintenance reminders to protect your home, improve efficiency, and prevent costly repairs.</p>
+        <div class="home-care-tip-box">
+            <p class="home-care-tip-focus" id="home-care-tip-focus">Today's focus</p>
+            <p class="home-care-tip-text" id="home-care-tip-text">Loading today's tip...</p>
+        </div>
+    </section>
+
     <!-- <section class="missing-pet-section" aria-labelledby="missing-pet-heading">
         <h2 id="missing-pet-heading">Missing Cat</h2>
         <p class="missing-pet-intro">
@@ -377,6 +386,83 @@
         tipEl.textContent = tip.text;
     }
 
+    function loadHomeCareTipOfDay() {
+        const focusEl = document.getElementById("home-care-tip-focus");
+        const tipEl = document.getElementById("home-care-tip-text");
+
+        if (!focusEl || !tipEl) {
+            return;
+        }
+
+        const tips = [
+            {
+                focus: "Change HVAC air filters",
+                text: "Replace HVAC filters every 1 to 3 months, or more often if you have pets, allergies, or construction dust. Clean filters improve airflow, indoor air quality, and system efficiency."
+            },
+            {
+                focus: "Test smoke and carbon monoxide alarms",
+                text: "Press the test button on smoke and carbon monoxide alarms every few months and replace batteries as needed. Working alarms provide early warning during a fire or carbon monoxide emergency."
+            },
+            {
+                focus: "Inspect for water leaks",
+                text: "Check under sinks, around toilets, near the water heater, and around HVAC equipment. Finding small leaks early can prevent mold, water damage, and costly repairs."
+            },
+            {
+                focus: "Clean gutters and downspouts",
+                text: "Clean gutters in spring and fall and confirm that downspouts send water away from the foundation. Clear drainage helps protect the roof, siding, and foundation from water damage."
+            },
+            {
+                focus: "Schedule HVAC maintenance",
+                text: "Have the air conditioner checked before summer and the heating system checked before winter. Preventive service can improve efficiency and reduce the chance of an inconvenient breakdown."
+            },
+            {
+                focus: "Inspect the roof and exterior",
+                text: "Look for damaged shingles, loose flashing, cracked caulk, peeling paint, and openings around windows or pipes. Early repairs help prevent water intrusion and structural damage."
+            },
+            {
+                focus: "Check weather seals",
+                text: "Inspect door sweeps, window caulk, and garage door seals twice a year. Good seals help keep conditioned air inside and moisture and pests outside."
+            },
+            {
+                focus: "Pressure wash exterior surfaces",
+                text: "Pressure wash the exterior and driveway annually to remove dirt, algae, mildew, and buildup. Use the correct pressure for each surface to avoid damaging siding, brick, concrete, or paint."
+            },
+            {
+                focus: "Clean the dryer exhaust",
+                text: "Clean the lint screen after every load and have the dryer exhaust vent cleaned annually. Removing lint reduces fire risk, improves drying time, and saves energy."
+            },
+            {
+                focus: "Flush the water heater",
+                text: "Flush a conventional tank water heater annually, following the manufacturer's instructions, to remove sediment and maintain efficiency. Tankless units may need manufacturer-recommended descaling instead."
+            },
+            {
+                focus: "Test the garage door safety reverse",
+                text: "Test the garage door auto-reverse feature annually and lubricate moving parts as recommended. Have a professional handle high-tension spring repairs."
+            },
+            {
+                focus: "Know your water shutoffs",
+                text: "Locate and test the main water valve and plumbing shutoffs. Knowing how to stop the water quickly can greatly reduce damage from a burst pipe or major leak."
+            },
+            {
+                focus: "Watch for termites and pests",
+                text: "Check for mud tubes, damaged wood, moisture problems, and gaps around the home. Early pest treatment is usually less disruptive and less expensive than repairing extensive damage."
+            },
+            {
+                focus: "Maintain the chimney",
+                text: "Have the chimney and fireplace inspected and cleaned when used regularly or as recommended by a qualified chimney professional. This helps reduce fire and carbon monoxide risks."
+            }
+        ];
+
+        const now = new Date();
+        const startOfYear = new Date(now.getFullYear(), 0, 0);
+        const msPerDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor((now - startOfYear) / msPerDay);
+        const tip = tips[dayOfYear % tips.length];
+
+        focusEl.textContent = `Today's focus: ${tip.focus}`;
+        tipEl.textContent = tip.text;
+    }
+
     function shuffleHoaCandidates() {
         const candidateGrid = document.getElementById("hoa-candidate-grid");
         if (!candidateGrid) {
@@ -392,6 +478,7 @@
     }
 
     loadYardTipOfDay();
+    loadHomeCareTipOfDay();
     shuffleHoaCandidates();
     showFireworkSafetyForHolidayWindow();
     showUsa250BannerForHolidayWindow();
