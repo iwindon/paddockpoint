@@ -432,8 +432,12 @@ footer {
 }
 
 .announcement-item p {
-    margin: 0;
+    margin: 0 0 12px;
     line-height: 1.6;
+}
+
+.announcement-item p:last-child {
+    margin-bottom: 0;
 }
 
 .missing-pet-section {
