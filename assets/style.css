@@ -43,6 +43,43 @@ h2 {
     color: #4a6b3f;
 }
 
+.remembrance-section {
+    background: #f4f1eb;
+    border: 1px solid #c8c1b5;
+    border-left: 5px solid #4a4a46;
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.remembrance-section h2 {
+    margin: 0 0 10px;
+    color: #383834;
+}
+
+.remembrance-section p {
+    max-width: 700px;
+    margin: 0 auto 10px;
+    color: #4a4944;
+    line-height: 1.6;
+}
+
+.remembrance-section .remembrance-date {
+    margin-bottom: 6px;
+    color: #6b665d;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.remembrance-section .remembrance-closing {
+    margin-bottom: 0;
+    color: #383834;
+    font-weight: 700;
+}
+
 .heat-advisory-section {
     background: #ffdfd7;
     border: 2px solid #c62828;
