@@ -31,7 +31,7 @@
 </nav>
 
 <main>
-    <section class="remembrance-section" aria-labelledby="remembrance-heading">
+    <section class="remembrance-section" aria-labelledby="remembrance-heading" hidden>
         <p class="remembrance-date">September 11</p>
         <h2 id="remembrance-heading">In Remembrance</h2>
         <p>We remember the lives lost on September 11, 2001, honor the courage of the first responders and service members who served, and hold their families and loved ones in our thoughts.</p>
@@ -200,6 +200,17 @@
         const isDisplayWindow = year === 2026 && month === 6 && (date === 3 || date === 4);
 
         bannerEl.hidden = !isDisplayWindow;
+    }
+
+    function showRemembranceOnSeptemberEleventh() {
+        const remembranceEl = document.querySelector(".remembrance-section");
+        if (!remembranceEl) {
+            return;
+        }
+
+        const today = new Date();
+        const isSeptemberEleventh = today.getMonth() === 8 && today.getDate() === 11;
+        remembranceEl.hidden = !isSeptemberEleventh;
     }
 
     function showFireworkSafetyForHolidayWindow() {
@@ -467,6 +478,7 @@
         }
     }
 
+    showRemembranceOnSeptemberEleventh();
     loadYardTipOfDay();
     loadHomeCareTipOfDay();
     shuffleHoaCandidates();
