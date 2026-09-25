@@ -649,6 +649,60 @@ footer {
     font-style: italic;
 }
 
+.community-assistance-section {
+    background: #eef7f0;
+    border: 2px solid #5b9367;
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 24px;
+}
+
+.community-assistance-section h2 {
+    margin: 0 0 10px;
+    color: #2e6840;
+}
+
+.community-assistance-section p {
+    margin: 0 0 12px;
+    color: #314a38;
+    line-height: 1.55;
+}
+
+.community-assistance-section p:last-child {
+    margin-bottom: 0;
+}
+
+.community-assistance-label {
+    color: #4c7d58 !important;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.community-assistance-list {
+    margin: 0 0 14px;
+    padding-left: 22px;
+    color: #314a38;
+}
+
+.community-assistance-list li {
+    margin-bottom: 6px;
+}
+
+.community-assistance-list li:last-child {
+    margin-bottom: 0;
+}
+
+.community-assistance-section a {
+    color: #2e6840;
+    font-weight: 700;
+}
+
+.community-assistance-closing {
+    font-weight: 600;
+}
+
 .emergency-contact-section {
     background: #fff3cd;
     border: 2px solid #f0a700;
