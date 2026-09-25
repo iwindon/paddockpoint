@@ -390,6 +390,14 @@
         ];
 
         const now = new Date();
+        const isFallWinterWeedWindow = now.getMonth() >= 8 && now.getMonth() <= 10;
+
+        if (isFallWinterWeedWindow) {
+            focusEl.textContent = "Today's focus: Fall pre-emergent weed prevention";
+            tipEl.textContent = "Now is a good time to apply a pre-emergent herbicide to help prevent fall and winter weeds. Follow the product label carefully and water it in as directed. Plan on another application in December or January, followed by another in April, to maintain seasonal coverage.";
+            return;
+        }
+
         const startOfYear = new Date(now.getFullYear(), 0, 0);
         const msPerDay = 1000 * 60 * 60 * 24;
         const dayOfYear = Math.floor((now - startOfYear) / msPerDay);
