@@ -23,6 +23,9 @@
             font-weight: 700;
             letter-spacing: 0.03em;
         }
+        .pool-closed-banner.is-closed {
+            background: #c62828;
+        }
         .pool-card-announcement {
             background: #e3f2fd;
             border-left: 6px solid #1976d2;
@@ -70,9 +73,9 @@
 </nav>
 
 <main>
-    <div class="pool-closed-banner">
-        POOL OPEN<br>
-        <span style="font-size:0.8em; font-weight:400;">The pool is currently open for residents and guests.</span>
+    <div class="pool-closed-banner" id="pool-status" role="status" aria-live="polite">
+        <span id="pool-status-label">POOL OPEN</span><br>
+        <span id="pool-status-message" style="font-size:0.8em; font-weight:400;">The pool is currently open for residents and guests.</span>
     </div>
 
     <section class="pool-card-announcement" aria-labelledby="pool-card-pickup-heading">
@@ -193,6 +196,19 @@
 <footer>
     Paddock Point Neighborhood
 </footer>
+
+<script>
+    const today = new Date();
+    const monthDay = (today.getMonth() + 1) * 100 + today.getDate();
+    const poolIsOpen = monthDay >= 501 && monthDay <= 930;
+    const poolStatus = document.getElementById("pool-status");
+
+    if (!poolIsOpen) {
+        poolStatus.classList.add("is-closed");
+        document.getElementById("pool-status-label").textContent = "POOL CLOSED";
+        document.getElementById("pool-status-message").textContent = "The pool is currently closed for the season.";
+    }
+</script>
 
 </body>
 </html>
