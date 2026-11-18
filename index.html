@@ -94,7 +94,7 @@
 
     <section class="yard-tip-section" aria-labelledby="yard-tip-heading">
         <h2 id="yard-tip-heading">Yard Care Tip of the Day</h2>
-        <p class="yard-tip-intro">Built for Paddock Point lawns: Bermuda grass, young trees, front shrubs, and Roebuck red clay soil.</p>
+        <p class="yard-tip-intro">Seasonal guidance for Paddock Point lawns: Bermuda grass, young trees, front shrubs, and Roebuck red clay soil.</p>
         <div class="yard-tip-box">
             <p class="yard-tip-focus" id="yard-tip-focus">Today's focus</p>
             <p class="yard-tip-text" id="yard-tip-text">Loading today's tip...</p>
@@ -395,19 +395,66 @@
             }
         ];
 
-        const now = new Date();
-        const isFallWinterWeedWindow = now.getMonth() >= 8 && now.getMonth() <= 10;
+        const winterTips = [
+            {
+                focus: "Keep weeds from setting seed",
+                text: "Walk beds, lawn edges, and fence lines every week or two and remove weeds before they set seed. Hand-pull when the soil is workable; avoid digging in wet red clay, which can compact it."
+            },
+            {
+                focus: "Choose weed treatments carefully",
+                text: "Bermuda is dormant in winter, but that does not make every herbicide safe for your lawn or nearby plants. Identify the weed, check that the product is labeled for your grass and site, and follow all label directions."
+            },
+            {
+                focus: "Plan spring pre-emergent",
+                text: "Pre-emergent products prevent certain weeds from germinating; they will not control weeds that are already growing. Check the label and local recommendations for the right timing and watering instructions before applying in spring."
+            },
+            {
+                focus: "Refresh bed mulch",
+                text: "Keep planting beds covered with about 2 to 3 inches of mulch to discourage weeds and protect soil. Pull existing weeds first, and leave a few inches of space around tree trunks and shrub stems."
+            },
+            {
+                focus: "Clear leaves from the lawn",
+                text: "Rake or mulch fallen leaves before they form a thick, wet mat over dormant Bermuda. Leaves can be composted or used as a light layer in beds, where they help protect soil and suppress weeds."
+            },
+            {
+                focus: "Test soil before feeding",
+                text: "Use the cooler months to get a soil test and plan any needed amendments for spring. Avoid fertilizing dormant Bermuda; use test results and product directions to guide any future applications."
+            },
+            {
+                focus: "Make a spring repair list",
+                text: "Note thin or bare lawn patches, compacted areas, and places where water puddles after rain. Bermuda repairs are best planned for active spring growth, when the grass can establish and fill in."
+            },
+            {
+                focus: "Tidy bed edges and hardscapes",
+                text: "Remove weeds along sidewalks, driveways, and bed edges, and clear debris where it collects. A clean edge now makes spring maintenance easier and helps catch turf creeping into beds."
+            },
+            {
+                focus: "Check drainage after rain",
+                text: "After a winter storm, note where water runs off or stands in red clay. Small drainage and grading corrections are easier to plan before spring growth, but avoid working soil while it is saturated."
+            },
+            {
+                focus: "Prepare tools for spring",
+                text: "Clean and sharpen mower blades, inspect hoses and sprinklers, and make sure hand tools are ready. Sharp blades and working equipment help avoid rushed lawn care once Bermuda starts growing."
+            },
+            {
+                focus: "Protect dormant Bermuda",
+                text: "Dormant Bermuda may look brown through winter; avoid heavy traffic on it when the ground is wet or frozen. Wait for spring green-up before resuming regular mowing and seasonal lawn treatments."
+            },
+            {
+                focus: "Prune with plant timing in mind",
+                text: "Remove dead or damaged branches, but check the flowering time of shrubs before pruning. Some spring-blooming plants set their flower buds on old wood and can lose blooms if pruned in winter."
+            }
+        ];
 
-        if (isFallWinterWeedWindow) {
-            focusEl.textContent = "Today's focus: Fall pre-emergent weed prevention";
-            tipEl.textContent = "Now is a good time to apply a pre-emergent herbicide to help prevent fall and winter weeds. Follow the product label carefully and water it in as directed. Plan on another application in December or January, followed by another in April, to maintain seasonal coverage.";
-            return;
-        }
+        const now = new Date();
+        const month = now.getMonth();
+        const isWinterRotation = month >= 10 || month <= 1;
 
         const startOfYear = new Date(now.getFullYear(), 0, 0);
         const msPerDay = 1000 * 60 * 60 * 24;
         const dayOfYear = Math.floor((now - startOfYear) / msPerDay);
-        const tip = tips[dayOfYear % tips.length];
+        const tipList = isWinterRotation ? winterTips : tips;
+        const tip = tipList[dayOfYear % tipList.length];
 
         focusEl.textContent = `Today's focus: ${tip.focus}`;
         tipEl.textContent = tip.text;
